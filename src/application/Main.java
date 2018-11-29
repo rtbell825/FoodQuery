@@ -12,7 +12,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Scene root = FXMLLoader.load(getClass().getResource("/FoodAnalyzer.fxml"));
+			Scene root = FXMLLoader.load(getClass().getResource("FoodAnalyzer.fxml"));
 			primaryStage.setScene(root);
 			primaryStage.show();
 		} catch(Exception e) {
