@@ -10,14 +10,17 @@ import javafx.scene.layout.BorderPane;
 
 public class Main extends Application {
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage stage) {
+		Parent root = null;
 		try {
-			Scene root = FXMLLoader.load(getClass().getResource("FoodAnalyzer.fxml"));
-			primaryStage.setScene(root);
-			primaryStage.show();
+			root = FXMLLoader.load(getClass().getResource("FoodAnalyzer.fxml"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		Scene scene = new Scene(root, 800, 800);
+		stage.setTitle("FXML Welcome");
+		stage.setScene(scene);
+		stage.show();
 	}
 	
 	public static void main(String[] args) {
