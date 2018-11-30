@@ -11,7 +11,6 @@ import javafx.scene.layout.BorderPane;
 public class Main extends Application {
 	@Override
 	public void start(Stage stage) {
-		System.out.println("This is a test");
 		Parent root = null;
 		try {
 			root = FXMLLoader.load(getClass().getResource("FoodAnalyzer.fxml"));
