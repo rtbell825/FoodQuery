@@ -1,6 +1,7 @@
 package application;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * This class represents the backend for managing all 
@@ -21,7 +22,8 @@ public class FoodData implements FoodDataADT<FoodItem> {
      * Public constructor
      */
     public FoodData() {
-        // TODO : Complete
+        foodItemList = new ArrayList<FoodItem>();
+        indexes = new HashMap<String, BPTree<Double, FoodItem>>();
     }
     
     
@@ -60,7 +62,9 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void addFoodItem(FoodItem foodItem) {
-        // TODO : Complete
+        foodItemList.add(foodItem);
+        //TODO Add foodItem to the indexes hash
+        return;
     }
 
     /*
@@ -69,8 +73,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> getAllFoodItems() {
-        // TODO : Complete
-        return null;
+        return foodItemList;
     }
 
 
