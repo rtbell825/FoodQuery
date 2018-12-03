@@ -2,6 +2,12 @@ package application;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.File;
+import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 
 /**
  * This class represents the backend for managing all 
@@ -33,7 +39,39 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void loadFoodItems(String filePath) {
-        // TODO : Complete
+    	Scanner scnr = null;
+    	try {
+    		scnr = new Scanner(new File(filePath));
+    		scnr.useDelimiter(",");
+    		while (scnr.hasNextLine()) {
+    			String id = scnr.next();
+    			String name = scnr.next();
+    			String calories = scnr.next();
+    			double calNum = scnr.nextDouble();
+    			String fat = scnr.next();
+    			double fatNum = scnr.nextDouble();
+    			String Carb = scnr.next();
+    			double CarbNum = scnr.nextDouble();
+    			String fiber = scnr.next();
+    			double fibNum = scnr.nextDouble();
+    			String protin = scnr.next();
+    			double proNum = scnr.nextDouble();
+    			FoodItem curr = new FoodItem(id, name);
+    			curr.addNutrient(calories, calNum);
+    			curr.addNutrient(fat, fatNum);
+    			curr.addNutrient(Carb, CarbNum);
+    			curr.addNutrient(fiber, fibNum);
+    			curr.addNutrient(protin, proNum);
+    			foodItemList.add(curr);
+    			BPTree tree = new BPTree(3); //I am unsure of what the purpose of the BPTree is. What is a good BF?
+    			tree.insert(id, curr);
+    			indexes.put(id, tree); // Between the previous comment and this one I have no idea if this is correct. 
+    		}
+    	} catch (FileNotFoundException e) {
+    		e.printStackTrace();
+    	} finally {
+    		scnr.close();
+    	}
     }
 
     /*

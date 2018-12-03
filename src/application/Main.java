@@ -11,6 +11,9 @@ import javafx.scene.layout.BorderPane;
 public class Main extends Application {
 	@Override
 	public void start(Stage stage) {
+		//These lines are to test FoodData.java
+		//FoodData food = new FoodData();
+		//food.loadFoodItems("foodItems.csv");
 		Parent root = null;
 		try {
 			root = FXMLLoader.load(getClass().getResource("FoodAnalyzer.fxml"));
@@ -25,6 +28,5 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		launch(args);
-		//This is a test
 	}
 }
