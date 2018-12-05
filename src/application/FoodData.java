@@ -23,6 +23,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     // Map of nutrients and their corresponding index
     private HashMap<String, BPTree<Double, FoodItem>> indexes;
     
+    private int branchingFactor;
     
     /**
      * Public constructor
@@ -30,6 +31,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     public FoodData() {
         foodItemList = new ArrayList<FoodItem>();
         indexes = new HashMap<String, BPTree<Double, FoodItem>>();
+        branchingFactor = 3;
     }
     
     
@@ -41,17 +43,23 @@ public class FoodData implements FoodDataADT<FoodItem> {
     public void loadFoodItems(String filePath) {
     	Scanner scnr = null;
     	try {
+    		BPTree calTree = new BPTree(branchingFactor); 
+    		BPTree fatTree = new BPTree(branchingFactor);
+    		BPTree carbTree = new BPTree(branchingFactor);
+    		BPTree fiberTree = new BPTree(branchingFactor);
+    		BPTree proTree = new BPTree(branchingFactor);
     		scnr = new Scanner(new File(filePath));
     		scnr.useDelimiter(",");
     		while (scnr.hasNextLine()) {
+    			try {
     			String id = scnr.next();
     			String name = scnr.next();
     			String calories = scnr.next();
     			double calNum = scnr.nextDouble();
     			String fat = scnr.next();
     			double fatNum = scnr.nextDouble();
-    			String Carb = scnr.next();
-    			double CarbNum = scnr.nextDouble();
+    			String carb = scnr.next();
+    			double carbNum = scnr.nextDouble();
     			String fiber = scnr.next();
     			double fibNum = scnr.nextDouble();
     			String protin = scnr.next();
@@ -59,17 +67,31 @@ public class FoodData implements FoodDataADT<FoodItem> {
     			FoodItem curr = new FoodItem(id, name);
     			curr.addNutrient(calories, calNum);
     			curr.addNutrient(fat, fatNum);
-    			curr.addNutrient(Carb, CarbNum);
+    			curr.addNutrient(carb, carbNum);
     			curr.addNutrient(fiber, fibNum);
     			curr.addNutrient(protin, proNum);
     			foodItemList.add(curr);
-    			BPTree tree = new BPTree(3); //I am unsure of what the purpose of the BPTree is. What is a good BF?
-    			tree.insert(id, curr);
-    			indexes.put(id, tree); // Between the previous comment and this one I have no idea if this is correct. 
+    			calTree.insert(calNum, curr);
+    			fatTree.insert(fatNum, curr);
+    			carbTree.insert(carbNum, curr);
+    			fiberTree.insert(fibNum, curr);
+    			proTree.insert(proNum, curr);
+    			//need to make a tree for each of the nutrients. Then pass in the nutrient value as the key 
+    			//and the value as the foodItem that nutrient came from.  
+    			} catch (Exception e) {
+    				continue;
+    			}
     		}
+    		indexes.put("calories", calTree);
+    		indexes.put("fat", fatTree);
+    		indexes.put("carbohydrate", carbTree);
+    		indexes.put("fiber", fiberTree);
+    		indexes.put("protein", proTree);
     	} catch (FileNotFoundException e) {
-    		e.printStackTrace();
-    	} finally {
+    		System.out.println("File could not be loaded.");
+    	} catch (IOException e) {
+    		System.out.println("File could not be read.");
+    	}finally {
     		scnr.close();
     	}
     }
