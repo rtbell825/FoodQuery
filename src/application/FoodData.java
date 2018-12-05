@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.Scanner;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 
 /**
@@ -134,6 +135,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void addFoodItem(FoodItem foodItem) {
+    	// Need to make this alphanumeric? How?
         foodItemList.add(foodItem);
         HashMap<String, Double> nutrients = foodItem.getNutrients();
         indexes.get("calories").insert(nutrients.get("calories"), foodItem);
@@ -156,8 +158,26 @@ public class FoodData implements FoodDataADT<FoodItem> {
 
 	@Override
 	public void saveFoodItems(String filename) {
-		// TODO Auto-generated method stub
-		
+		FileWriter fileWriter = null;
+		PrintWriter printWriter = null;
+		try {
+			fileWriter = new FileWriter("filename");
+		    printWriter = new PrintWriter(fileWriter);
+			for (int i = 0; i < foodItemList.size(); ++i) {
+				String toBeWritten = "";
+				FoodItem curr = foodItemList.get(i);
+				toBeWritten.concat(curr.getID() + "," + curr.getName() + "," + "calories" + "," 
+						+ curr.getNutrients().get("calories") + "," + "fat" + curr.getNutrients().get("fat") + "," 
+						+ "carbohydrate" + "," + curr.getNutrients().get("carbohydrate") + "," + "fiber" + ","
+						+ curr.getNutrients().get("fiber") + "," + "protein" + "," + curr.getNutrients().get("protein"));
+				printWriter.println(toBeWritten); // Could have to use .write instead
+			}
+			printWriter.flush();
+		} catch (IOException e) {
+			System.out.println("File could not be written to.");
+		} finally {
+			printWriter.close();
+		}
 	}
 
 }
