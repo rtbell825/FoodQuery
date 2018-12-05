@@ -39,6 +39,8 @@ public class FoodData implements FoodDataADT<FoodItem> {
      * (non-Javadoc)
      * @see skeleton.FoodDataADT#loadFoodItems(java.lang.String)
      */
+    //need to make a tree for each of the nutrients. Then pass in the nutrient value as the key 
+	//and the value as the foodItem that nutrient came from.  
     @Override
     public void loadFoodItems(String filePath) {
     	Scanner scnr = null;
@@ -54,15 +56,15 @@ public class FoodData implements FoodDataADT<FoodItem> {
     			try {
     			String id = scnr.next();
     			String name = scnr.next();
-    			String calories = scnr.next();
+    			String calories = scnr.next().toLowerCase();
     			double calNum = scnr.nextDouble();
-    			String fat = scnr.next();
+    			String fat = scnr.next().toLowerCase();
     			double fatNum = scnr.nextDouble();
-    			String carb = scnr.next();
+    			String carb = scnr.next().toLowerCase();
     			double carbNum = scnr.nextDouble();
-    			String fiber = scnr.next();
+    			String fiber = scnr.next().toLowerCase();
     			double fibNum = scnr.nextDouble();
-    			String protin = scnr.next();
+    			String protin = scnr.next().toLowerCase();
     			double proNum = scnr.nextDouble();
     			FoodItem curr = new FoodItem(id, name);
     			curr.addNutrient(calories, calNum);
@@ -76,8 +78,6 @@ public class FoodData implements FoodDataADT<FoodItem> {
     			carbTree.insert(carbNum, curr);
     			fiberTree.insert(fibNum, curr);
     			proTree.insert(proNum, curr);
-    			//need to make a tree for each of the nutrients. Then pass in the nutrient value as the key 
-    			//and the value as the foodItem that nutrient came from.  
     			} catch (Exception e) {
     				continue;
     			}
@@ -100,8 +100,14 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> filterByName(String substring) {
-        // TODO : Complete
-        return null;
+        ArrayList<FoodItem> returnList = new ArrayList<FoodItem>();
+    	substring = substring.toLowerCase();
+        for (int i = 0; i < foodItemList.size(); ++i) {
+        	if (foodItemList.get(i).getName().toLowerCase().contains(substring)) {
+        		returnList.add(foodItemList.get(i));
+        	}
+        }
+        return returnList;
     }
 
     /*
