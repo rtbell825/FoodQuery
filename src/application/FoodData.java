@@ -60,7 +60,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     			double calNum = scnr.nextDouble();
     			String fat = scnr.next().toLowerCase();
     			double fatNum = scnr.nextDouble();
-    			String carb = scnr.next().toLowerCase();
+    			String carbohydrate = scnr.next().toLowerCase();
     			double carbNum = scnr.nextDouble();
     			String fiber = scnr.next().toLowerCase();
     			double fibNum = scnr.nextDouble();
@@ -69,7 +69,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     			FoodItem curr = new FoodItem(id, name);
     			curr.addNutrient(calories, calNum);
     			curr.addNutrient(fat, fatNum);
-    			curr.addNutrient(carb, carbNum);
+    			curr.addNutrient(carbohydrate, carbNum);
     			curr.addNutrient(fiber, fibNum);
     			curr.addNutrient(protin, proNum);
     			foodItemList.add(curr);
@@ -127,7 +127,12 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public void addFoodItem(FoodItem foodItem) {
         foodItemList.add(foodItem);
-        //TODO Add foodItem to the indexes hash
+        HashMap<String, Double> nutrients = foodItem.getNutrients();
+        indexes.get("calories").insert(nutrients.get("calories"), foodItem);
+        indexes.get("fat").insert(nutrients.get("fat"), foodItem);
+        indexes.get("carbohydrate").insert(nutrients.get("carbohydrate"), foodItem);
+        indexes.get("fiber").insert(nutrients.get("fiber"), foodItem);
+        indexes.get("protein").insert(nutrients.get("protein"), foodItem);
         return;
     }
 
