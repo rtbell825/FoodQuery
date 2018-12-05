@@ -43,11 +43,11 @@ public class FoodData implements FoodDataADT<FoodItem> {
     public void loadFoodItems(String filePath) {
     	Scanner scnr = null;
     	try {
-    		BPTree calTree = new BPTree(branchingFactor); 
-    		BPTree fatTree = new BPTree(branchingFactor);
-    		BPTree carbTree = new BPTree(branchingFactor);
-    		BPTree fiberTree = new BPTree(branchingFactor);
-    		BPTree proTree = new BPTree(branchingFactor);
+    		BPTree<Double, FoodItem> calTree = new BPTree<Double, FoodItem>(branchingFactor); 
+    		BPTree<Double, FoodItem> fatTree = new BPTree<Double, FoodItem>(branchingFactor);
+    		BPTree<Double, FoodItem> carbTree = new BPTree<Double, FoodItem>(branchingFactor);
+    		BPTree<Double, FoodItem> fiberTree = new BPTree<Double, FoodItem>(branchingFactor);
+    		BPTree<Double, FoodItem> proTree = new BPTree<Double, FoodItem>(branchingFactor);
     		scnr = new Scanner(new File(filePath));
     		scnr.useDelimiter(",");
     		while (scnr.hasNextLine()) {
@@ -89,9 +89,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     		indexes.put("protein", proTree);
     	} catch (FileNotFoundException e) {
     		System.out.println("File could not be loaded.");
-    	} catch (IOException e) {
-    		System.out.println("File could not be read.");
-    	}finally {
+    	} finally {
     		scnr.close();
     	}
     }
