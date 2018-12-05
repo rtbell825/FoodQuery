@@ -116,8 +116,16 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> filterByNutrients(List<String> rules) {
-        // TODO : Complete
-        return null;
+        List<FoodItem> returnList = new ArrayList<FoodItem>();
+        // Separate the rules 
+        String searchNutrient = rules.get(0).toLowerCase();
+        String comparator = rules.get(1);
+        double key = Double.parseDouble(rules.get(2));
+        // Get BPTree for the specified nutrient
+    	BPTree<Double, FoodItem> filterTree = indexes.get(searchNutrient);
+    	// Call on BPTree method to do the searching work for me
+    	returnList = filterTree.rangeSearch(key, comparator);
+        return returnList;
     }
 
     /*
