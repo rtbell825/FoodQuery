@@ -52,6 +52,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
     @Override
     public void insert(K key, V value) {
         // TODO : Complete
+        //we need to traverse each internal node, going down to its children nodes until we are at the correct leaf
     }
     
     
@@ -201,7 +202,12 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         boolean isOverflow() {
             // TODO : Complete
-            return false;
+            if (keys.size() + 1 > branchingFactor) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
         
         /**
@@ -210,6 +216,14 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         void insert(K key, V value) {
             // TODO : Complete
+            if (isOverflow()) {
+               Node parent = split();
+               parent.insert(key, value);
+            }
+            else {
+               keys.add(key);
+               //children.add(); how do we get a child node for a newly created parent node??
+            }
         }
         
         /**
@@ -218,7 +232,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         Node split() {
             // TODO : Complete
-            return null;
+            Node parent = new InternalNode();
+            return parent;
         }
         
         /**
@@ -276,7 +291,12 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         boolean isOverflow() {
             // TODO : Complete
-            return false;
+            if (keys.size() + 1 > branchingFactor) {
+                return true;
+            }
+            else {  
+                return false;
+            }
         }
         
         /**
@@ -285,6 +305,14 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         void insert(K key, V value) {
             // TODO : Complete
+            if (isOverflow()) {
+                InternalNode parent = (InternalNode) split(); //splits and returns a new parent internal node
+                parent.insert(key, value); //inserts key value into parent
+            }
+            else {
+                keys.add(key); //need to be added in ascending order
+                values.add(value); //need to be added in ascending order
+            }
         }
         
         /**
@@ -293,7 +321,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         Node split() {
             // TODO : Complete
-            return null;
+            InternalNode parent = new InternalNode();
+            return parent;
         }
         
         /**
