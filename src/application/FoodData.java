@@ -44,6 +44,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
 	//and the value as the foodItem that nutrient came from.  
     @Override
     public void loadFoodItems(String filePath) {
+    	System.out.println("loadFoodItem");
     	Scanner scnr = null;
     	try {
     		BPTree<Double, FoodItem> calTree = new BPTree<Double, FoodItem>(branchingFactor); 
