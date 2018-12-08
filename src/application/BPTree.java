@@ -41,7 +41,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             throw new IllegalArgumentException(
                "Illegal branching factor: " + branchingFactor);
         }
-        // TODO : Complete
+        root = null;
+        this.branchingFactor = branchingFactor;
     }
     
     
@@ -53,6 +54,22 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
     public void insert(K key, V value) {
         // TODO : Complete
         //we need to traverse each internal node, going down to its children nodes until we are at the correct leaf
+        if (root == null ) {
+            LeafNode n = new LeafNode();
+            n.insert(key, value);
+            root = n;
+        }
+
+        if (root.isLeaf()) {
+            root.insert(key, value);
+        } 
+        else {
+            Node curr = root;
+        }
+        
+        
+        
+        
     }
     
     
@@ -117,13 +134,17 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         
         // List of keys
         List<K> keys;
+        boolean isLeaf;
         
         /**
          * Package constructor
          */
         Node() {
+            keys = new ArrayList<K>();
             // TODO : Complete
         }
+        
+        abstract boolean isLeaf();
         
         /**
          * Inserts key and value in the appropriate leaf node 
@@ -187,12 +208,16 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             // TODO : Complete
         }
         
+        boolean isLeaf() {
+            return false;
+        }
+        
         /**
          * (non-Javadoc)
          * @see BPTree.Node#getFirstLeafKey()
          */
         K getFirstLeafKey() {
-            // TODO : Complete
+            //TODO
             return null;
         }
         
@@ -275,6 +300,9 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             // TODO : Complete
         }
         
+        boolean isLeaf() {
+            return true;
+        }
         
         /**
          * (non-Javadoc)
@@ -291,7 +319,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         boolean isOverflow() {
             // TODO : Complete
-            if (keys.size() + 1 > branchingFactor) {
+            if (keys.size() + 1 >= branchingFactor) {
                 return true;
             }
             else {  
@@ -310,8 +338,30 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                 parent.insert(key, value); //inserts key value into parent
             }
             else {
-                keys.add(key); //need to be added in ascending order
-                values.add(value); //need to be added in ascending order
+                if (keys == null) {
+                    keys.add(key);
+                }
+                else { //this loops adds the keys and values to the list in an ascending order
+                    insertInOrder(key);
+                }
+            }
+        }
+        
+        void insertInOrder(K key) {
+            for(int i = 0; i <= keys.size(); i++) { //NOTE: it is intentionally left as <= ...read here v
+                if (i == keys.size()) { //if the index has reached the last element of the list, and the key
+                    //...was still greater, add it to the end
+                    keys.add(key);
+                    break;
+                }
+                if (key.compareTo(keys.get(i)) == 1) { //if the key to add is greater than the current keys
+                    continue;
+                }
+                else {
+                    keys.add(i, key);
+                    break;
+                    //values.add(i, value); not sure about this yet?
+                }
             }
         }
         
@@ -321,8 +371,14 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         Node split() {
             // TODO : Complete
-            InternalNode parent = new InternalNode();
-            return parent;
+            LeafNode sister = new LeafNode();
+            
+            
+            
+            
+            
+            
+            return sister;
         }
         
         /**
