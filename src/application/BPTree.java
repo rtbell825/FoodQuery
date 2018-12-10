@@ -242,7 +242,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         K getFirstLeafKey() {
             //TODO
             //first leaf key of the subtree? as in the "left-most" key in the subtree?
-            return null;
+            return children.get(0).getFirstLeafKey();
         }
         
         /**
@@ -314,12 +314,19 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             InternalNode sister = new InternalNode();
 
             int halfIndex = keys.size() / 2; //will yield desired half index for even or odd lists
-            for (int i = halfIndex; i < keys.size(); i++) { //adds keys and values to sister leaf node
-                //sister.insert(keys.get(i)); PROBLEM: need to insert with a value...but we don't have a value?
-            }
-            for (int i = keys.size() - 1; i >= halfIndex; i--) { //removes keys from original InternalNode
-                keys.remove(i);
-            }
+            // Adds all keys and children from second half of original node to sister node.
+            sister.keys.addAll(keys.subList(halfIndex, keys.size()));
+            sister.children.addAll(children.subList(halfIndex, children.size() + 1));
+            // Removes keys and children added to sister from original node.
+            keys.subList(halfIndex, keys.size()).clear();
+            children.subList(halfIndex, keys.size() + 1).clear();
+            
+//            for (int i = halfIndex; i < keys.size(); i++) { //adds keys and values to sister leaf node
+//                //sister.insert(keys.get(i)); PROBLEM: need to insert with a value...but we don't have a value?
+//            }
+//            for (int i = keys.size() - 1; i >= halfIndex; i--) { //removes keys from original InternalNode
+//                keys.remove(i);
+//            }
             
             return sister;
         }
@@ -545,7 +552,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
      */
     public static void main(String[] args) {
         // create empty BPTree with branching factor of 3
-        BPTree<Double, Double> bpTree = new BPTree<>(3);
+        BPTree<Double, Double> BPTree = new BPTree<>(3);
 
         // create a pseudo random number generator
         Random rnd1 = new Random();
@@ -563,10 +570,10 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         for (int i = 0; i < 400; i++) {
             Double j = dd[rnd1.nextInt(4)];
             list.add(j);
-            bpTree.insert(j, j);
-            System.out.println("\n\nTree structure:\n" + bpTree.toString());
+            BPTree.insert(j, j);
+            System.out.println("\n\nTree structure:\n" + BPTree.toString());
         }
-        List<Double> filteredValues = bpTree.rangeSearch(0.2d, ">=");
+        List<Double> filteredValues = BPTree.rangeSearch(0.2d, ">=");
         System.out.println("Filtered values: " + filteredValues.toString());
     }
 
