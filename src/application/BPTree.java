@@ -95,7 +95,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             !comparator.contentEquals("==") && 
             !comparator.contentEquals("<=") )
             return new ArrayList<V>();
-        // TODO : Complete
         
         return root.rangeSearch(key, comparator);
     }
@@ -355,17 +354,17 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         List<V> rangeSearch(K key, String comparator) {
             // TODO : Complete
-            for(int i = 0; i <= keys.size(); i++) {
-                if (i == keys.size()) { //if this is true, that means that key was bigger than every key in this node's
-                    //...list of keys
-                    return children.get(i).rangeSearch(key, comparator);
-                }
-                else if (key.compareTo(keys.get(i)) == -1) {
-                    return children.get(i).rangeSearch(key, comparator);
-                }
-            }
-            return null; //shouldn't ever reach this line
-        }
+               for(int i = 0; i <= keys.size(); i++) {
+                   if (i == keys.size()) { //if this is true, that means that key was bigger than every key in this node's
+                       //...list of keys
+                       return children.get(i).rangeSearch(key, comparator);
+                   }
+                   else if (key.compareTo(keys.get(i)) == -1) {
+                       return children.get(i).rangeSearch(key, comparator);
+                   }
+               }
+               return null; //shouldn't ever reach this line
+           }
     
     } // End of class InternalNode
     
