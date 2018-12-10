@@ -1,6 +1,7 @@
 package application;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -94,7 +95,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             !comparator.contentEquals("==") && 
             !comparator.contentEquals("<=") )
             return new ArrayList<V>();
-        // TODO : Complete
         
         return root.rangeSearch(key, comparator);
     }
@@ -329,10 +329,9 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#rangeSearch(java.lang.Comparable, java.lang.String)
          */
         List<V> rangeSearch(K key, String comparator) {
-            // TODO : Complete
             for(int i = 0; i <= keys.size(); i++) {
-                if (i == keys.size()) { //if this is true, that means that key was bigger than every key in this node's
-                    //...list of keys
+                if (i == keys.size()) { //if this is true, that means that key was greater than or equal to
+                    //...every key in the list of keys
                     return children.get(i).rangeSearch(key, comparator);
                 }
                 else if (key.compareTo(keys.get(i)) == -1) {
@@ -458,9 +457,9 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                 else if (key.compareTo(keys.get(i)) == 1) { //if the key to add is greater than the current keys
                     continue;
                 }
-                else {
+                else { //if the key is equal to or less than
                     keys.add(i, key);
-                    values.add(i, value); //not sure about this yet?
+                    values.add(i, value); //key and value are added in the same place in their respective Array Lists
                     break; 
                 }
             }
@@ -493,29 +492,42 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#rangeSearch(Comparable, String)
          */
         List<V> rangeSearch(K key, String comparator) {
-            // TODO : Complete
             if (comparator.contentEquals(">=")) {
                 //return the list of values that is greater than or equal to the key
                 List<V> greaterList = new ArrayList<V>();
-                for(int i = 0; i < keys.size(); i++) {
-                    if (key.compareTo(keys.get(i)) <= 0) { //value in key list is equal to or greater than key
-                        //we want to add all values to the "right" of this value to a list and return that list
+                LeafNode curr = this;
+                do {
+                    for(int i = 0; i < curr.keys.size(); i++) {
+                        if (key.compareTo(curr.keys.get(i)) <= 0) { //value in key list is equal to or greater than key
+                            //we want to add all values to the "right" of this value to a list and return that list
+                            greaterList.add(values.get(i));
+                        }
                     }
-                }
+                    curr = this.next;
+                } while (curr != null);
                 return greaterList;
             }
             else if (comparator.contentEquals("<=")) {
                 //return the list of values that is less than or equal to the key
                 List<V> lesserList = new ArrayList<V>();
-                for(int i = 0; i < keys.size(); i++) {
-                    if (key.compareTo(keys.get(i)) >= 0) { //value in key list is equal to or less than key
-                        //we want to add all values to the "left" of this value to a list and return that list
+                LeafNode curr = this;
+                do {
+                    for(int i = curr.keys.size() - 1; i >= 0; i--) {
+                        if (key.compareTo(curr.keys.get(i)) >= 0) { //value in key list is equal to or less than key
+                            //we want to add all values to the "left" of this value to a list and return that list
+                            lesserList.add(values.get(i));
+                        }
                     }
-                }
+                    curr = this.previous;
+                }while (curr != null);
+                //the above loop yields a list in reverse order...
+                Collections.reverse(lesserList);
                 return lesserList;
             }
             else {
-                //return a list of values that is equal to the key
+                //return a list of values that are equal to the key
+                //TODO: Not yet designed to handle duplicate values in multiple leaf nodes, only duplicates in
+                //...this leaf node
                 List<V> equalList = new ArrayList<V>();
                 for (int i = 0; i < keys.size(); i++) {
                     if (key.compareTo(keys.get(i)) == 0) {
