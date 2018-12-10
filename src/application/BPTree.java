@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Collections;
 
 /**
  * Implementation of a B+ tree to allow efficient access to
@@ -233,6 +234,23 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         
         List<Node> getChildren() {
             return children;
+        }
+        
+        /**
+         * Gets child of internal node.
+         * @param key
+         * @return
+         */
+        Node getChild (K key) {
+            int searchResult = Collections.binarySearch(keys, key);
+            if (searchResult >= 0) 
+                return children.get(searchResult);
+            else
+                // If key is not found, binarySearch returns the negative index where the key would be added,
+                // minus one. Thus, the if the key is not found, the return value from binarySearch must
+                // be made positive again, and have one subtracted in order to insert the key in the proper
+                // location.
+                return children.get(-searchResult - 1);
         }
         
         /**
@@ -480,17 +498,25 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         Node split() {
             // TODO : Complete
             LeafNode sister = new LeafNode();
+            sister.setNext(next);
             next = sister;
             sister.setPrev(this);
 
-            int halfIndex = keys.size() / 2; //will yield desired half index for even or odd lists
-            for (int i = halfIndex; i < keys.size(); i++) { //adds keys and values to sister leaf node
-                sister.insert(keys.get(i), values.get(i)); //I think?
-            }
-            for (int i = keys.size() - 1; i >= halfIndex; i--) { //removes keys from original LeafNode
-                keys.remove(i);
-                values.remove(i);
-            }
+            int halfIndex = (keys.size() + 1)/ 2; //will yield desired half index for even or odd lists
+            // Inserts keys and values from half index of list to end into sister.
+            sister.keys.addAll(keys.subList(halfIndex, keys.size()));
+            sister.values.addAll(values.subList(halfIndex, keys.size()));
+            // Deletes keys and values added to sister node from original.
+            keys.subList(halfIndex, keys.size()).clear();
+            values.subList(halfIndex, keys.size()).clear();
+            
+//            for (int i = halfIndex; i < keys.size(); i++) { //adds keys and values to sister leaf node
+//                sister.insert(keys.get(i), values.get(i)); //I think?
+//            }
+//            for (int i = keys.size() - 1; i >= halfIndex; i--) { //removes keys from original LeafNode
+//                keys.remove(i);
+//                values.remove(i);
+//            }
             
             return sister;
         }
