@@ -95,7 +95,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             !comparator.contentEquals("<=") )
             return new ArrayList<V>();
         // TODO : Complete
-        return null;
+        
+        return root.rangeSearch(key, comparator);
     }
     
     
@@ -329,7 +330,16 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         List<V> rangeSearch(K key, String comparator) {
             // TODO : Complete
-            return null;
+            for(int i = 0; i <= keys.size(); i++) {
+                if (i == keys.size()) { //if this is true, that means that key was bigger than every key in this node's
+                    //...list of keys
+                    return children.get(i).rangeSearch(key, comparator);
+                }
+                else if (key.compareTo(keys.get(i)) == -1) {
+                    return children.get(i).rangeSearch(key, comparator);
+                }
+            }
+            return null; //shouldn't ever reach this line
         }
     
     } // End of class InternalNode
@@ -484,7 +494,36 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         List<V> rangeSearch(K key, String comparator) {
             // TODO : Complete
-            return null;
+            if (comparator.contentEquals(">=")) {
+                //return the list of values that is greater than or equal to the key
+                List<V> greaterList = new ArrayList<V>();
+                for(int i = 0; i < keys.size(); i++) {
+                    if (key.compareTo(keys.get(i)) <= 0) { //value in key list is equal to or greater than key
+                        //we want to add all values to the "right" of this value to a list and return that list
+                    }
+                }
+                return greaterList;
+            }
+            else if (comparator.contentEquals("<=")) {
+                //return the list of values that is less than or equal to the key
+                List<V> lesserList = new ArrayList<V>();
+                for(int i = 0; i < keys.size(); i++) {
+                    if (key.compareTo(keys.get(i)) >= 0) { //value in key list is equal to or less than key
+                        //we want to add all values to the "left" of this value to a list and return that list
+                    }
+                }
+                return lesserList;
+            }
+            else {
+                //return a list of values that is equal to the key
+                List<V> equalList = new ArrayList<V>();
+                for (int i = 0; i < keys.size(); i++) {
+                    if (key.compareTo(keys.get(i)) == 0) {
+                        equalList.add(values.get(i));
+                    }
+                }
+                return equalList;
+            }
         }
 
         @Override
