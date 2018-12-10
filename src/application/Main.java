@@ -27,9 +27,11 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		Scene scene = new Scene(root, 800, 800);
-		stage.setTitle("FXML Welcome");
+		stage.setTitle("Food Analyzer");
 		stage.setScene(scene);
 		stage.show();
+		stage.setResizable(false);
+		
 	}
 	
 	public static void main(String[] args) {
