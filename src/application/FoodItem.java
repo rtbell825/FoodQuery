@@ -61,7 +61,10 @@ public class FoodItem {
      * If nutrient already exists, updates its value.
      */
     public void addNutrient(String name, double value) {
-        if (nutrients.containsKey(name)) {
+        if (value < 0) {
+        	return;
+        }
+    	if (nutrients.containsKey(name)) {
             nutrients.replace(name, value);
         }
         else {
