@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="325.0" prefWidth="229.0" style="-fx-background-color: #636363;" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AnalyzeMealController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #636363;" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox prefHeight="350.0" prefWidth="229.0">
+      <VBox prefHeight="350.0" prefWidth="220.0">
          <children>
             <Label text="Calories" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
                <padding>
-                  <Insets left="88.0" />
+                  <Insets left="85.0" />
                </padding>
                <VBox.margin>
-                  <Insets top="35.0" />
+                  <Insets top="60.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="TotalCaloris">
+            <Label fx:id="TotalCalories" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="50.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
                <VBox.margin>
-                  <Insets left="60.0" right="60.0" top="2.0" />
+                  <Insets left="88.0" />
                </VBox.margin>
-            </TextField>
+            </Label>
             <Label text="Fat(grams)" textFill="WHITE">
                <font>
                   <Font size="14.0" />
@@ -40,14 +44,17 @@
                   <Insets left="80.0" />
                </padding>
                <VBox.margin>
-                  <Insets top="2.0" />
+                  <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="TotalFat">
+            <Label fx:id="TotalFat" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="50.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
                <VBox.margin>
-                  <Insets left="60.0" right="60.0" top="2.0" />
+                  <Insets left="88.0" />
                </VBox.margin>
-            </TextField>
+            </Label>
             <Label text="Carbohydrates(grams)" textFill="WHITE">
                <font>
                   <Font size="14.0" />
@@ -56,14 +63,17 @@
                   <Insets left="40.0" />
                </padding>
                <VBox.margin>
-                  <Insets top="2.0" />
+                  <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="TotalCarbs" prefWidth="200.0">
+            <Label fx:id="TotalCarbs" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="50.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
                <VBox.margin>
-                  <Insets left="60.0" right="60.0" top="2.0" />
+                  <Insets left="88.0" />
                </VBox.margin>
-            </TextField>
+            </Label>
             <Label text="Fiber(grams)" textFill="WHITE">
                <font>
                   <Font size="14.0" />
@@ -72,14 +82,17 @@
                   <Insets left="75.0" />
                </padding>
                <VBox.margin>
-                  <Insets top="2.0" />
+                  <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="TotalFiber" prefWidth="200.0">
+            <Label fx:id="TotalFiber" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="50.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
                <VBox.margin>
-                  <Insets left="60.0" right="60.0" top="2.0" />
+                  <Insets left="88.0" />
                </VBox.margin>
-            </TextField>
+            </Label>
             <Label text="Protein(grams)" textFill="WHITE">
                <font>
                   <Font size="14.0" />
@@ -88,17 +101,20 @@
                   <Insets left="70.0" />
                </padding>
                <VBox.margin>
-                  <Insets top="2.0" />
+                  <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="TotalProtein" prefWidth="200.0">
+            <Label fx:id="TotalProtein" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="50.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
                <VBox.margin>
-                  <Insets left="60.0" right="60.0" top="2.0" />
+                  <Insets left="88.0" />
                </VBox.margin>
-            </TextField>
+            </Label>
             <Button fx:id="AnalyzeTotalMeal" mnemonicParsing="false" onAction="#totalNutrientsInMeal" style="-fx-background-color: #C5050C#C5050C;" text="Analyze" textFill="WHITE">
                <VBox.margin>
-                  <Insets left="80.0" top="15.0" />
+                  <Insets left="78.0" top="15.0" />
                </VBox.margin>
                <effect>
                   <DropShadow blurType="ONE_PASS_BOX" />
@@ -115,5 +131,10 @@
             </Menu>
          </menus>
       </MenuBar>
+      <AnchorPane layoutX="220.0" layoutY="52.0" prefHeight="246.0" prefWidth="260.0">
+         <children>
+            <PieChart fx:id="Chart" prefHeight="313.0" prefWidth="374.0" style="-fx-background-insets: 2;" AnchorPane.rightAnchor="10.0"/>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

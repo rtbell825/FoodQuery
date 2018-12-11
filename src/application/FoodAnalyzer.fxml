@@ -16,31 +16,25 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FoodAnalyzerController">
+<AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem mnemonicParsing="false" text="New" />
-                  <MenuItem mnemonicParsing="false" text="Open" />
-                  <MenuItem mnemonicParsing="false" text="Load Food List" />
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+                  <MenuItem fx:id="Reset" mnemonicParsing="false" onAction="#resetAnalyzer" text="New" />
+                  <MenuItem fx:id="SaveList" mnemonicParsing="false" onAction="#saveFoodList" text="Save Food List" />
+                  <MenuItem fx:id="LoadList" mnemonicParsing="false" onAction="#loadFoodList" text="Load Food List" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="Help" mnemonicParsing="false" onAction="#launchInstructionsWindow" text="About" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <BorderPane prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: #898888;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: #898888;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
          <center>
             <AnchorPane maxHeight="-Infinity" prefHeight="720.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                <children>
@@ -95,11 +89,14 @@
                               <Insets left="10.0" top="103.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="TotalFoodListItems" prefWidth="200.0">
+                        <Label fx:id="TotalFoodListItems" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="100.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
                            <VBox.margin>
-                              <Insets left="60.0" right="60.0" />
+                              <Insets left="50.0" />
                            </VBox.margin>
-                        </TextField>
+                        </Label>
                      </children>
                   </VBox>
                   <VBox layoutY="451.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="451.0">

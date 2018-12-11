@@ -7,33 +7,46 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 
 public class Main extends Application {
+	
+	
+	
 	@Override
 	public void start(Stage stage) {
 		//These lines are to test FoodData.java
-		//FoodData food = new FoodData();
+		FoodData food = new FoodData();
 		//food.loadFoodItems("foodItems.csv");
 		//List<FoodItem> foodItems = food.getAllFoodItems();
 		//System.out.println("This is a test");
-		//List<FoodItem> list = food.filterByName("d");
-		//for (int i = 0; i < list.size(); ++i) {
-		//	System.out.println(list.get(i).getName());
+		//for (int i = 0; i < foodItems.size(); ++i) {
+		//	System.out.println(foodItems.get(i).getName());
 		//}
+		
+		PrimaryGUI controller = new PrimaryGUI(food);
+		controller.showStage();
+		
+		/*
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("FoodAnalyzer.fxml"));
 		Parent root = null;
 		try {
-			root = FXMLLoader.load(getClass().getResource("FoodAnalyzer.fxml"));
-		} catch(Exception e) {
+			root = loader.load();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		PrimaryGUI controller = loader.<PrimaryGUI>getController();
+		controller.food = food;
+		
 		Scene scene = new Scene(root, 800, 800);
 		stage.setTitle("Food Analyzer");
 		stage.setScene(scene);
 		stage.show();
 		stage.setResizable(false);
+		*/
 		
 	}
 	
