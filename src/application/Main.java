@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -13,13 +15,14 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) {
 		//These lines are to test FoodData.java
-		//FoodData food = new FoodData();
-		//food.loadFoodItems("foodItems.csv");
-		//List<FoodItem> foodItems = food.getAllFoodItems();
-		//System.out.println("This is a test");
-		//for (int i = 0; i < foodItems.size(); ++i) {
-		//	System.out.println(foodItems.get(i).getName());
-		//}
+		FoodData food = new FoodData();
+		food.loadFoodItems("foodItems.csv");
+		List<FoodItem> foodItems = food.getAllFoodItems();
+		System.out.println("This is a test");
+		List<FoodItem> list = food.filterByName("d");
+		for (int i = 0; i < list.size(); ++i) {
+			System.out.println(list.get(i).getName());
+		}
 		Parent root = null;
 		try {
 			root = FXMLLoader.load(getClass().getResource("FoodAnalyzer.fxml"));

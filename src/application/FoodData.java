@@ -54,8 +54,12 @@ public class FoodData implements FoodDataADT<FoodItem> {
     		BPTree<Double, FoodItem> proTree = new BPTree<Double, FoodItem>(branchingFactor);
     		scnr = new Scanner(new File(filePath));
     		while (scnr.hasNextLine()) {
-    			String[] inputLine = scnr.nextLine().split(",");
     			try {
+    				String nextLine = scnr.nextLine();
+    				if (nextLine.length() < 20) {
+        				continue;
+        			}
+    				String[] inputLine = nextLine.split(",");
 	    			String id = inputLine[0];
 	    			String name = inputLine[1];
 	    			String calories = inputLine[2];
