@@ -26,32 +26,43 @@ public class FoodData implements FoodDataADT<FoodItem> {
     
     private int branchingFactor;
     
+    private BPTree<Double, FoodItem> calTree;
+    private BPTree<Double, FoodItem> fatTree;
+    private BPTree<Double, FoodItem> carbTree;
+    private BPTree<Double, FoodItem> fiberTree;
+    private BPTree<Double, FoodItem> proTree;
+    
     /**
      * Public constructor
+     * 
      */
     public FoodData() {
         foodItemList = new ArrayList<FoodItem>();
         indexes = new HashMap<String, BPTree<Double, FoodItem>>();
         branchingFactor = 3;
+        calTree = new BPTree<Double, FoodItem>(branchingFactor); 
+		fatTree = new BPTree<Double, FoodItem>(branchingFactor);
+		carbTree = new BPTree<Double, FoodItem>(branchingFactor);
+		fiberTree = new BPTree<Double, FoodItem>(branchingFactor);
+		proTree = new BPTree<Double, FoodItem>(branchingFactor);
+		indexes.put("calories", calTree);
+		indexes.put("fat", fatTree);
+		indexes.put("carbohydrate", carbTree);
+		indexes.put("fiber", fiberTree);
+		indexes.put("protein", proTree);
     }
     
     
     /*
      * (non-Javadoc)
      * @see skeleton.FoodDataADT#loadFoodItems(java.lang.String)
-     */
-    //need to make a tree for each of the nutrients. Then pass in the nutrient value as the key 
-	//and the value as the foodItem that nutrient came from.  
+     * need to make a tree for each of the nutrients. Then pass in the nutrient value as the key 
+	 * and the value as the foodItem that nutrient came from.
+     */  
     @Override
     public void loadFoodItems(String filePath) {
-		System.out.println("loadFoodItem");
     	Scanner scnr = null;
     	try {
-    		BPTree<Double, FoodItem> calTree = new BPTree<Double, FoodItem>(branchingFactor); 
-    		BPTree<Double, FoodItem> fatTree = new BPTree<Double, FoodItem>(branchingFactor);
-    		BPTree<Double, FoodItem> carbTree = new BPTree<Double, FoodItem>(branchingFactor);
-    		BPTree<Double, FoodItem> fiberTree = new BPTree<Double, FoodItem>(branchingFactor);
-    		BPTree<Double, FoodItem> proTree = new BPTree<Double, FoodItem>(branchingFactor);
     		scnr = new Scanner(new File(filePath));
     		while (scnr.hasNextLine()) {
     			try {
@@ -90,11 +101,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     				continue;
     			}
     		}
-    		indexes.put("calories", calTree);
-    		indexes.put("fat", fatTree);
-    		indexes.put("carbohydrate", carbTree);
-    		indexes.put("fiber", fiberTree);
-    		indexes.put("protein", proTree);
+    		
     	} catch (FileNotFoundException e) {
     		System.out.println("File could not be loaded.");
     	} finally {

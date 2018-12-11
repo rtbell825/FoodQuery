@@ -17,14 +17,10 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage stage) {
+		
 		//These lines are to test FoodData.java
 		FoodData food = new FoodData();
-		//food.loadFoodItems("foodItems.csv");
-		//List<FoodItem> foodItems = food.getAllFoodItems();
-		//System.out.println("This is a test");
-		//for (int i = 0; i < foodItems.size(); ++i) {
-		//	System.out.println(foodItems.get(i).getName());
-		//}
+		food.loadFoodItems("foodItems.csv");
 		
 		PrimaryGUI controller = new PrimaryGUI(food);
 		controller.showStage();
