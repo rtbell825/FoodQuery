@@ -44,7 +44,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
 	//and the value as the foodItem that nutrient came from.  
     @Override
     public void loadFoodItems(String filePath) {
-    	System.out.println("loadFoodItem");
+		System.out.println("loadFoodItem");
     	Scanner scnr = null;
     	try {
     		BPTree<Double, FoodItem> calTree = new BPTree<Double, FoodItem>(branchingFactor); 
@@ -53,34 +53,36 @@ public class FoodData implements FoodDataADT<FoodItem> {
     		BPTree<Double, FoodItem> fiberTree = new BPTree<Double, FoodItem>(branchingFactor);
     		BPTree<Double, FoodItem> proTree = new BPTree<Double, FoodItem>(branchingFactor);
     		scnr = new Scanner(new File(filePath));
-    		scnr.useDelimiter(",");
     		while (scnr.hasNextLine()) {
+    			String[] inputLine = scnr.nextLine().split(",");
     			try {
-    			String id = scnr.next();
-    			String name = scnr.next();
-    			String calories = scnr.next().toLowerCase();
-    			double calNum = scnr.nextDouble();
-    			String fat = scnr.next().toLowerCase();
-    			double fatNum = scnr.nextDouble();
-    			String carbohydrate = scnr.next().toLowerCase();
-    			double carbNum = scnr.nextDouble();
-    			String fiber = scnr.next().toLowerCase();
-    			double fibNum = scnr.nextDouble();
-    			String protin = scnr.next().toLowerCase();
-    			double proNum = scnr.nextDouble();
-    			FoodItem curr = new FoodItem(id, name);
-    			curr.addNutrient(calories, calNum);
-    			curr.addNutrient(fat, fatNum);
-    			curr.addNutrient(carbohydrate, carbNum);
-    			curr.addNutrient(fiber, fibNum);
-    			curr.addNutrient(protin, proNum);
-    			foodItemList.add(curr);
-    			calTree.insert(calNum, curr);
-    			fatTree.insert(fatNum, curr);
-    			carbTree.insert(carbNum, curr);
-    			fiberTree.insert(fibNum, curr);
-    			proTree.insert(proNum, curr);
+	    			String id = inputLine[0];
+	    			String name = inputLine[1];
+	    			String calories = inputLine[2];
+	    			double calNum = Double.parseDouble(inputLine[3]);
+	    			String fat = inputLine[4];
+	    			double fatNum = Double.parseDouble(inputLine[5]);
+	    			String carbohydrate = inputLine[6];
+	    			double carbNum = Double.parseDouble(inputLine[7]);
+	    			String fiber = inputLine[8];
+	    			double fibNum = Double.parseDouble(inputLine[9]);
+	    			String protin = inputLine[10];
+	    			double proNum = Double.parseDouble(inputLine[11]);
+	    			
+	    			FoodItem curr = new FoodItem(id, name);
+	    			curr.addNutrient(calories, calNum);
+	    			curr.addNutrient(fat, fatNum);
+	    			curr.addNutrient(carbohydrate, carbNum);
+	    			curr.addNutrient(fiber, fibNum);
+	    			curr.addNutrient(protin, proNum);
+	    			foodItemList.add(curr);
+	    			calTree.insert(calNum, curr);
+	    			fatTree.insert(fatNum, curr);
+	    			carbTree.insert(carbNum, curr);
+	    			fiberTree.insert(fibNum, curr);
+	    			proTree.insert(proNum, curr);
     			} catch (Exception e) {
+    				e.printStackTrace();
     				continue;
     			}
     		}
