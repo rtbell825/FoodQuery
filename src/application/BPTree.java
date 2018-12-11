@@ -1,4 +1,4 @@
-package application;
+//package application;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -53,6 +53,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
      */
     @Override
     public void insert(K key, V value) {
+        if (key == null)
+            return;
         if (root == null ) { //if root references null...
             LeafNode n = new LeafNode(); //create a new LeafNode and insert the KV pair and set root
             n.insert(key, value);
@@ -276,7 +278,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                         children.add(newChild);
                         break;
                     }
-                    if (newKey.compareTo(keys.get(j)) <= 0) { //TODO
+                    if (newKey.compareTo(keys.get(j)) < 0) { //TODO
                         
                         int c = j;
                         while (children.get(c).getFirstLeafKey().compareTo(newKey) < 0) {
@@ -523,7 +525,22 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
     
     public static void main(String[] args) {
         BPTree<Integer, Integer> BPTree = new BPTree<>(3);
-        
+//        BPTree.insert(null, null);
+//        BPTree.insert(0, 0);
+//        BPTree.insert(0, 0);
+//        BPTree.insert(0, 0);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(1, 1);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(2, 2);
+//        BPTree.insert(0, 0);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(3, 3);
+        BPTree.insert(80,80);
+        BPTree.insert(3, 3);
+        BPTree.insert(-1, -1);
+        BPTree.insert(0, 0);
+        System.out.println("Tree:\n" + BPTree.toString());
         BPTree.insert(8, 8);
         System.out.println("Tree:\n" + BPTree.toString());
         BPTree.insert(0, 0);
