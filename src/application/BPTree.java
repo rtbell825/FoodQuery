@@ -293,11 +293,11 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             InternalNode sister = new InternalNode();
             int halfIndex = keys.size() / 2;
             
-            sister.keys.addAll(keys.subList(halfIndex, keys.size()-1));
-            sister.children.addAll(children.subList(halfIndex, keys.size()-1));
+            sister.keys.addAll(keys.subList(halfIndex, keys.size()));
+            sister.children.addAll(children.subList(halfIndex, keys.size()));
             // Deletes keys and values added to sister node from original.
-            keys.subList(halfIndex, keys.size()-1).clear();
-            children.subList(halfIndex, keys.size()-1).clear();
+            keys.subList(halfIndex, keys.size()).clear();
+            children.subList(halfIndex, keys.size()).clear();
             
             return sister;
         }
@@ -407,11 +407,11 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 
             int halfIndex = keys.size() / 2; //will yield desired half index for even or odd lists
             // Inserts keys and values from half index of list to end into sister.
-            sister.keys.addAll(keys.subList(halfIndex, keys.size()-1));
-            sister.values.addAll(values.subList(halfIndex, keys.size()-1));
+            sister.keys.addAll(keys.subList(halfIndex, keys.size()));
+            sister.values.addAll(values.subList(halfIndex, keys.size()));
             // Deletes keys and values added to sister node from original.
-            keys.subList(halfIndex, keys.size()-1).clear();
-            values.subList(halfIndex, keys.size()-1).clear();
+            keys.subList(halfIndex, keys.size()).clear();
+            values.subList(halfIndex, keys.size()).clear();
             
             return sister;
         }
