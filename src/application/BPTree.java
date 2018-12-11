@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import BPTree.InternalNode;
+import BPTree.LeafNode;
+import BPTree.Node;
 import java.util.Collections;
 
 /**
@@ -53,34 +56,24 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
      */
     @Override
     public void insert(K key, V value) {
-        // TODO : Mostly complete
         if (root == null ) { //if root references null...
             LeafNode n = new LeafNode(); //create a new LeafNode and insert the KV pair and set root
             n.insert(key, value);
             root = n;
         }
-
-        if (root.isLeaf()) { //if the root is a leaf, insert directly
+        else {
             root.insert(key, value);
-        } 
-        else { //otherwise we must traverse to the correct leaf node
-            Node curr = root;
-            while (!curr.isLeaf()) { //while loop that traverses to the correct leaf node before inserting
-                List<K> cKeys = curr.getKeys();
-                List<Node> cChildren = curr.getChildren();
+            if (root.isOverflow()) {
+                Node newChild = root.split();
+                K newKey = newChild.getFirstLeafKey();
                 
-                //purposely left as <=, read below
-                for (int i = 0; i <= cKeys.size(); i++) { //iterates through curr's list of keys
-                    if (i == cKeys.size()) { //if this is true, that means that key was bigger than every key in cKeys
-                        curr = cChildren.get(i); //and so we get the "right-most" child
-                    }
-                    else if (key.compareTo(cKeys.get(i)) == -1) { //key to be inserted is less than a key in the list
-                        curr = cChildren.get(i);
-                    }  
-                }
+                InternalNode newParent = new InternalNode();
+                newParent.children.add(root);
+                newParent.children.add(newChild);
+                newParent.keys.add(newKey);
+                
+                root = newParent;
             }
-            curr.insert(key, value); //if we get here, that means that curr is no longer a leaf node (B+ trees
-            //...insert from the bottom)
         }  
     }
     
@@ -154,10 +147,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             keys = new ArrayList<K>();
         }
         
-        abstract boolean isLeaf();
-        abstract List<Node> getChildren(); //noted on Piazza that we could add methods to the private classes
-        abstract List<K> getKeys();
-        
         /**
          * Inserts key and value in the appropriate leaf node 
          * and balances the tree if required by splitting
@@ -223,17 +212,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             parent = null;
         }
         
-        boolean isLeaf() {
-            return false;
-        }
-        
-        List<K> getKeys() {
-            return keys;
-        }
-        
-        List<Node> getChildren() {
-            return children;
-        }
         
         /**
          * Gets child of internal node.
@@ -257,8 +235,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#getFirstLeafKey()
          */
         K getFirstLeafKey() {
-            //TODO
-            //first leaf key of the subtree? as in the "left-most" key in the subtree?
+            //gets the "left most" key in the subtree
             return children.get(0).getFirstLeafKey();
         }
         
@@ -267,7 +244,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#isOverflow()
          */
         boolean isOverflow() {
-            if (keys.size() + 1 >= branchingFactor) {
+            if (children.size() > branchingFactor) {
                 return true;
             }
             else {
@@ -280,44 +257,33 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#insert(java.lang.Comparable, java.lang.Object)
          */
         void insert(K key, V value) {
-            // TODO : Complete
-            if (isOverflow()) { //if key list will be equal to branching factor...
-                insertInOrder(key); //add items to lists anyway
-                Node sister = split(); //split the current node into two sibling nodes
-                if (parent == null) {
-                    parent = new InternalNode();
-                    parent.children.add(this); //we know this will be the correct order because the parent node has
-                    parent.children.add(sister); //...no children as of yet
-                    //need to update root as-well
-                }
-                else { //current node already has a parent
-                    //add the new sister node to the parent's children list
-                    //insert the key that corresponds with the first key in the sister?
-                }
-            }
-            else {
-                if (keys == null) {
-                    keys.add(key);
-                }
-                else { //this loops adds the keys and values to the list in an ascending order
-                    insertInOrder(key);
-                }
-            }
-        }
-        
-        void insertInOrder(K key) { //helper method that adds item in order
-            for(int i = 0; i <= keys.size(); i++) { //NOTE: it is intentionally left as <= ...read here v
-                if (i == keys.size()) { //if the index has reached the last element of the list, and the key
-                    //...was still greater, add it to the end
-                    keys.add(key);
+            Node chosenChild = null;
+            for (int i = 0; i <= keys.size(); i++) {
+                if (i == keys.size()) { //if this is true, then key was greater or equal to every key in the key list
+                    chosenChild = children.get(i);
+                    children.get(i).insert(key, value); //insert at "right-most" child
                     break;
                 }
-                else if (key.compareTo(keys.get(i)) == 1) { //if the key to add is greater than the current keys
-                    continue;
+                if (key.compareTo(keys.get(i)) < 0) { //if a key is found in key list that is greater than
+                    chosenChild = children.get(i);
+                    children.get(i).insert(key, value);//the current key, insert into corresponding child
+                    break;
                 }
-                else {
-                    keys.add(i, key);
-                    break; 
+            }
+            if (chosenChild.isOverflow()) {
+                Node newChild = chosenChild.split();
+                K newKey = newChild.getFirstLeafKey();
+                for(int j = 0; j <= keys.size(); j++) {
+                    if(j == keys.size()) {
+                        keys.add(newKey);
+                        children.add(newChild);
+                        break;
+                    }
+                    if (newKey.compareTo(keys.get(j)) < 0) {
+                        keys.add(j, newKey);
+                        children.add(j, newChild);
+                        break;
+                    }
                 }
             }
         }
@@ -327,23 +293,14 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#split()
          */
         Node split() {
-            // TODO : Complete
             InternalNode sister = new InternalNode();
-
-            int halfIndex = keys.size() / 2; //will yield desired half index for even or odd lists
-            // Adds all keys and children from second half of original node to sister node.
-            sister.keys.addAll(keys.subList(halfIndex, keys.size()));
-            sister.children.addAll(children.subList(halfIndex, children.size() + 1));
-            // Removes keys and children added to sister from original node.
-            keys.subList(halfIndex, keys.size()).clear();
-            children.subList(halfIndex, keys.size() + 1).clear();
+            int halfIndex = keys.size() / 2;
             
-//            for (int i = halfIndex; i < keys.size(); i++) { //adds keys and values to sister leaf node
-//                //sister.insert(keys.get(i)); PROBLEM: need to insert with a value...but we don't have a value?
-//            }
-//            for (int i = keys.size() - 1; i >= halfIndex; i--) { //removes keys from original InternalNode
-//                keys.remove(i);
-//            }
+            sister.keys.addAll(keys.subList(halfIndex, keys.size()-1));
+            sister.children.addAll(children.subList(halfIndex, keys.size()-1));
+            // Deletes keys and values added to sister node from original.
+            keys.subList(halfIndex, keys.size()-1).clear();
+            children.subList(halfIndex, keys.size()-1).clear();
             
             return sister;
         }
@@ -396,25 +353,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         LeafNode() {
             super();
             values = new ArrayList<V>();
-            parent = null;
             next = null;
             previous = null;
-        }
-        
-        void setPrev(LeafNode prev) {
-            previous = prev;
-        }
-        
-        void setNext(LeafNode next) {
-            this.next = next;
-        }
-        
-        boolean isLeaf() {
-            return true;
-        }
-        
-        List<K> getKeys() {
-            return keys;
         }
         
         /**
@@ -422,9 +362,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#getFirstLeafKey()
          */
         K getFirstLeafKey() {
-            // TODO : Complete
-            
-            return keys.get(0); //pretty sure this is what this means, since we are already in the leaf?
+            return keys.get(0);
         }
         
         /**
@@ -432,10 +370,10 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#isOverflow()
          */
         boolean isOverflow() {
-            if (keys.size() + 1 >= branchingFactor) {
+            if(values.size() >= branchingFactor) {
                 return true;
             }
-            else {  
+            else {
                 return false;
             }
         }
@@ -445,47 +383,17 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#insert(Comparable, Object)
          */
         void insert(K key, V value) {
-            // TODO : Mostly Complete
-            if (isOverflow()) { //if key list will be equal to branching factor...
-                insertInOrder(key, value); //add items to lists anyway
-                Node sister = split(); //split the current node into two sibling nodes
-                if (parent == null) {
-                    parent = new InternalNode();
-                    parent.children.add(this); //we know this will be the correct order because the parent node has
-                    parent.children.add(sister); //...no children as of yet
-                    //need to update root also
-                }
-                else { //current node already has a parent
-                    //add the new sister node to the parent's children list
-                    parent.children.add(sister); //is it in order?
-                    //insert the key that corresponds with the first key in the sister's list?
-                    //parent.insert(sister.getFirstLeafKey(), ); PROBLEM: Need a value?
-                }
-            }
-            else {
-                if (keys == null) {
-                    keys.add(key);
-                }
-                else { //this loops adds the keys and values to the list in an ascending order
-                    insertInOrder(key, value);
-                }
-            }
-        }
-        
-        void insertInOrder(K key, V value) { //helper method that adds items in order
             for(int i = 0; i <= keys.size(); i++) { //NOTE: it is intentionally left as <= ...read here v
                 if (i == keys.size()) { //if the index has reached the last element of the list, and the key
                     //...was still greater, add it to the end
                     keys.add(key);
+                    values.add(value);
                     break;
                 }
-                else if (key.compareTo(keys.get(i)) == 1) { //if the key to add is greater than the current keys
-                    continue;
-                }
-                else {
+                if (key.compareTo(keys.get(i)) == -1) { //key is smaller than key at index i
                     keys.add(i, key);
-                    values.add(i, value); //not sure about this yet?
-                    break; 
+                    values.add(i, value);
+                    break;
                 }
             }
         }
@@ -495,27 +403,18 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#split()
          */
         Node split() {
-            // TODO : Complete
             LeafNode sister = new LeafNode();
-            sister.setNext(next);
-            next = sister;
-            sister.setPrev(this);
 
-            int halfIndex = (keys.size() + 1)/ 2; //will yield desired half index for even or odd lists
+            next = sister;
+            sister.previous = this;
+
+            int halfIndex = keys.size() / 2; //will yield desired half index for even or odd lists
             // Inserts keys and values from half index of list to end into sister.
-            sister.keys.addAll(keys.subList(halfIndex, keys.size()));
-            sister.values.addAll(values.subList(halfIndex, keys.size()));
+            sister.keys.addAll(keys.subList(halfIndex, keys.size()-1));
+            sister.values.addAll(values.subList(halfIndex, keys.size()-1));
             // Deletes keys and values added to sister node from original.
-            keys.subList(halfIndex, keys.size()).clear();
-            values.subList(halfIndex, keys.size()).clear();
-            
-//            for (int i = halfIndex; i < keys.size(); i++) { //adds keys and values to sister leaf node
-//                sister.insert(keys.get(i), values.get(i)); //I think?
-//            }
-//            for (int i = keys.size() - 1; i >= halfIndex; i--) { //removes keys from original LeafNode
-//                keys.remove(i);
-//                values.remove(i);
-//            }
+            keys.subList(halfIndex, keys.size()-1).clear();
+            values.subList(halfIndex, keys.size()-1).clear();
             
             return sister;
         }
@@ -569,13 +468,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                 }
                 return equalList;
             }
-        }
-
-        @Override
-        List<BPTree<K, V>.Node> getChildren() {
-            //useless method for this node, couldn't think of another way to get the children from the
-            //...internal nodes
-            return null;
         }
         
     } // End of class LeafNode
