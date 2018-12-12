@@ -8,4 +8,4 @@ Ryan Bell: rtbell@wisc.edu | X-Team 85
 Harrison Colcord: colcord@wisc.edu | X-Team 85
 
 
-Andrew Harron: aharron@wisc.edu: X-Team 03
+Andrew Harron: aharron@wisc.edu | X-Team 03
