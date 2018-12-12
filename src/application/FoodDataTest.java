@@ -2,6 +2,7 @@ package application;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -10,13 +11,12 @@ import org.junit.Test;
 public class FoodDataTest {
 	
 	public static FoodData food;
-	public static FoodData oneFood;
 
 	@BeforeClass
 	public static void startShit() {
 		food = new FoodData();
 		food.loadFoodItems("foodItems.csv");
-		oneFood = new FoodData();
+		
 	}
 	
 	@Test
@@ -50,7 +50,8 @@ public class FoodDataTest {
 	}
 	
 	@Test
-	public void testLoadFoodItemsOneKeyBP() {
+	public void testLoadFoodItemsOneKeyID() {
+		FoodData oneFood = new FoodData();
 		FoodItem newFood = new FoodItem("id", "name");
 		newFood.addNutrient("calories", 5);
 		newFood.addNutrient("fat", 250);
@@ -59,6 +60,60 @@ public class FoodDataTest {
 		newFood.addNutrient("protein", 40);
 		oneFood.addFoodItem(newFood);
 		if (oneFood.getAllFoodItems().get(0).getID().equals("id")) {
+			assertTrue(true);
+		}
+		else {
+			fail("Fuck...");
+		}
+	}
+	
+	@Test
+	public void testLoadFoodItemsTwoKeySort() {
+		FoodData oneFood = new FoodData();
+		FoodItem newFood = new FoodItem("id", "name");
+		newFood.addNutrient("calories", 5);
+		newFood.addNutrient("fat", 250);
+		newFood.addNutrient("carbohydrate", 69);
+		newFood.addNutrient("fiber", 50);
+		newFood.addNutrient("protein", 40);
+		FoodItem newFood2 = new FoodItem("id2", "nana");
+		newFood2.addNutrient("calories", 50);
+		newFood2.addNutrient("fat", 2500);
+		newFood2.addNutrient("carbohydrate", 690);
+		newFood2.addNutrient("fiber", 500);
+		newFood2.addNutrient("protein", 400);
+		oneFood.addFoodItem(newFood);
+		oneFood.addFoodItem(newFood2);
+		if (oneFood.filterByName("na").get(1).getID().equals("id2")) {
+			assertTrue(true);
+		}
+		else {
+			fail("Fuck...");
+		}
+	}
+	
+	@Test
+	public void testLoadFoodItemsTwoKeyBP() {
+		FoodData oneFood = new FoodData();
+		FoodItem newFood = new FoodItem("id", "name");
+		newFood.addNutrient("calories", 5);
+		newFood.addNutrient("fat", 250);
+		newFood.addNutrient("carbohydrate", 69);
+		newFood.addNutrient("fiber", 50);
+		newFood.addNutrient("protein", 40);
+		oneFood.addFoodItem(newFood);
+		FoodItem newFood2 = new FoodItem("id2", "nana");
+		newFood2.addNutrient("calories", 50);
+		newFood2.addNutrient("fat", 2500);
+		newFood2.addNutrient("carbohydrate", 690);
+		newFood2.addNutrient("fiber", 500);
+		newFood2.addNutrient("protein", 400);
+		oneFood.addFoodItem(newFood2);
+		ArrayList<String> rules = new ArrayList<String>();
+		rules.add("calories");
+		rules.add("==");
+		rules.add("5");
+		if (oneFood.filterByNutrients(rules).get(0).getID().equals("id")) {
 			assertTrue(true);
 		}
 		else {
