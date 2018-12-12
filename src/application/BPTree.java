@@ -508,6 +508,18 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 //                    System.out.println("this.next: " + this.next);
                     curr = curr.next;
                 } while (curr != null);
+              //return the list of values that is less than or equal to the key
+                curr = this.previous;
+                do {
+                    for(int i = curr.keys.size() - 1; i >= 0; i--) {
+                        if (key.compareTo(curr.keys.get(i)) == 0) { //value in key list is equal to or less than key
+                            //we want to add all values to the "left" of this value to a list and return that list
+                            equalList.add(curr.values.get(i));
+                        }
+                    }
+                    curr = curr.previous;
+                } while (curr != null);
+                //the above loop yields a list in reverse order...
                 return equalList;
             }
         }
@@ -557,7 +569,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         System.out.println("\n\nTree structure:\n" + BPTree.toString());
         BPTree.insert(0.5 ,0.5);
         System.out.println("\n\nTree structure:\n" + BPTree.toString());
-        List<Double> filteredValues = BPTree.rangeSearch(0.2d, "=");
+        List<Double> filteredValues = BPTree.rangeSearch(0.2d, "==");
         System.out.println("Filtered values: " + filteredValues.toString());
     }
     
