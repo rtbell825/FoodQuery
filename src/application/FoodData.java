@@ -1,5 +1,6 @@
 package application;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.FileNotFoundException;
@@ -102,6 +103,8 @@ public class FoodData implements FoodDataADT<FoodItem> {
     			}
     		}
     		
+    	} catch (InputMismatchException e) {
+    		System.out.println("Incorrect nutrition type");
     	} catch (FileNotFoundException e) {
     		System.out.println("File could not be loaded.");
     	} finally {
