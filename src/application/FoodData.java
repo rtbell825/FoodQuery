@@ -171,29 +171,22 @@ public class FoodData implements FoodDataADT<FoodItem> {
 
 	@Override
 	public void saveFoodItems(String filename) {
-		//filename = filename.substring(0, filename.length() - 4);
 		File file = null;
-		//FileWriter fileWriter = null;
 		PrintWriter printWriter = null;
 		try {
 			file = new File(filename);
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-			//fileWriter = new FileWriter(file);
 		    printWriter = new PrintWriter(file);
 			for (int i = 0; i < foodItemList.size(); ++i) {
-				String toBeWritten = "";
 				FoodItem curr = foodItemList.get(i);
 				printWriter.println(curr.getID() + "," + curr.getName() + "," + "calories" + "," 
-						+ curr.getNutrients().get("calories") + "," + "fat" + curr.getNutrients().get("fat") + "," 
+						+ curr.getNutrients().get("calories") + "," + "fat," + curr.getNutrients().get("fat") + "," 
 						+ "carbohydrate" + "," + curr.getNutrients().get("carbohydrate") + "," + "fiber" + ","
 						+ curr.getNutrients().get("fiber") + "," + "protein" + "," + curr.getNutrients().get("protein"));
 				
-				// Could have to use .write instead
-				//fileWriter.write(toBeWritten);
 			}
-			//printWriter.flush();
 			
 		} catch (IOException e) {
 			System.out.println("File could not be written to.");

@@ -140,7 +140,7 @@ public class FoodDataTest {
 		oneFood.addFoodItem(newFood2);
 		ArrayList<String> rules = new ArrayList<String>();
 		rules.add("calories");
-		rules.add("<");
+		rules.add("<=");
 		rules.add("10");
 		if (oneFood.filterByNutrients(rules).get(0).getID().equals("id") && oneFood.filterByNutrients(rules).size() == 1) {
 			assertTrue(true);
@@ -169,9 +169,9 @@ public class FoodDataTest {
 		oneFood.addFoodItem(newFood2);
 		ArrayList<String> rules = new ArrayList<String>();
 		rules.add("calories");
-		rules.add(">");
+		rules.add(">=");
 		rules.add("10");
-		if (oneFood.filterByNutrients(rules).get(0).getID().equals("id") && oneFood.filterByNutrients(rules).size() == 1) {
+		if (oneFood.filterByNutrients(rules).get(0).getID().equals("id2") && oneFood.filterByNutrients(rules).size() == 1) {
 			assertTrue(true);
 		}
 		else {
@@ -199,6 +199,13 @@ public class FoodDataTest {
 		oneFood.addFoodItem(newFood2);
 		
 		oneFood.saveFoodItems("fileTest.txt");
+		oneFood.loadFoodItems("fileTest.txt");
+		if (oneFood.getAllFoodItems().get(1).getID().equals("id2")) {
+			assertTrue(true);
+		}
+		else {
+			fail("Fuck");
+		}
 	}
 
 }
