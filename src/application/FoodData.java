@@ -169,24 +169,25 @@ public class FoodData implements FoodDataADT<FoodItem> {
         return foodItemList;
     }
 
-
 	@Override
 	public void saveFoodItems(String filename) {
-		FileWriter fileWriter = null;
+		File file = null;
 		PrintWriter printWriter = null;
 		try {
-			fileWriter = new FileWriter("filename");
-		    printWriter = new PrintWriter(fileWriter);
+			file = new File(filename);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+		    printWriter = new PrintWriter(file);
 			for (int i = 0; i < foodItemList.size(); ++i) {
-				String toBeWritten = "";
 				FoodItem curr = foodItemList.get(i);
-				toBeWritten.concat(curr.getID() + "," + curr.getName() + "," + "calories" + "," 
-						+ curr.getNutrients().get("calories") + "," + "fat" + curr.getNutrients().get("fat") + "," 
+				printWriter.println(curr.getID() + "," + curr.getName() + "," + "calories" + "," 
+						+ curr.getNutrients().get("calories") + "," + "fat," + curr.getNutrients().get("fat") + "," 
 						+ "carbohydrate" + "," + curr.getNutrients().get("carbohydrate") + "," + "fiber" + ","
 						+ curr.getNutrients().get("fiber") + "," + "protein" + "," + curr.getNutrients().get("protein"));
-				printWriter.println(toBeWritten); // Could have to use .write instead
+				
 			}
-			printWriter.flush();
+			
 		} catch (IOException e) {
 			System.out.println("File could not be written to.");
 		} finally {

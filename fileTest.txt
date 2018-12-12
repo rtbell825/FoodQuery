@@ -1,0 +1,2 @@
+id,name,calories,5.0,fat,250.0,carbohydrate,69.0,fiber,50.0,protein,40.0
+id2,nana,calories,50.0,fat,2500.0,carbohydrate,690.0,fiber,500.0,protein,400.0
