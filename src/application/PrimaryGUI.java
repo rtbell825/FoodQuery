@@ -9,12 +9,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -105,33 +109,18 @@ public class PrimaryGUI{
 	// Event Listener on Button[#RemoveFromMealList].onAction
 	@FXML
 	public void removeFromMealList(ActionEvent event) {
+		FoodItem currItem = MealList.getSelectionModel().getSelectedItem();
 		
+		mealObList.remove(currItem);
+		initialize();
 	}
 	// Event Listener on Button[#AddToFoodList].onAction
 	@FXML
 	public void launchAddFoodWindow(ActionEvent event) {
-		AddFoodItemController controller2 = new AddFoodItemController(this);
+		AddFoodItemController controller2 = new AddFoodItemController(this, FoodList);
 		controller2.showStage();
-		
-		/*
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("FoodAnalyzer.fxml"));
-		Parent root = null;
-		try {
-			root = loader.load();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		AddFoodItemController controller = loader.<AddFoodItemController>getController();
-		controller.food = food;
-		
-		Scene addFoodScene = new Scene(root);
-		Stage addFoodStage = new Stage();
-		addFoodStage.setTitle("Add Food");
-		addFoodStage.setScene(addFoodScene);
-		addFoodStage.show();
-		addFoodStage.setResizable(false);
-		*/
+		initialize();
+
 	}
 	// Event Listener on Button[#SearchFoodList].onAction
 	@FXML
@@ -145,26 +134,7 @@ public class PrimaryGUI{
 		analyzerList = mealObList;
 		AnalyzeMealController controller3 = new AnalyzeMealController(this, analyzerList);
 		controller3.showStage();
-		
-		/*
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("FoodAnalyzer.fxml"));
-		Parent root = null;
-		try {
-			root = loader.load();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		AnalyzeMealController controller = loader.<AnalyzeMealController>getController();
-		controller.food = food;
-		
-		Scene analyzeMealScene = new Scene(root);
-		Stage analyzeMealStage = new Stage();
-		analyzeMealStage.setTitle("Analyze Meal");
-		analyzeMealStage.setScene(analyzeMealScene);
-		analyzeMealStage.show();
-		analyzeMealStage.setResizable(false);
-		*/
+
 	}
 	@FXML
 	public void resetAnalyzer(ActionEvent event) {
@@ -176,7 +146,19 @@ public class PrimaryGUI{
 	}
 	@FXML
 	public void loadFoodList(ActionEvent event) {
-		
+		String chosenFile = "";
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Resource File");
+		File file = fileChooser.showOpenDialog(thisStage);
+		if(file != null) {
+			chosenFile = file.getName();
+		}
+		if(chosenFile != "") {
+			food = new FoodData();
+			food.loadFoodItems(chosenFile);
+			System.out.println(foodObList.size());
+		}
+		initialize();
 	}
 	@FXML
 	public void launchInstructionsWindow(ActionEvent event) {
@@ -191,12 +173,20 @@ public class PrimaryGUI{
 	}
 	
 	public void initialize() {
-		//List<FoodItem> foodTest = new ArrayList<FoodItem>();
-		//foodTest = food.getAllFoodItems();
-		//System.out.println(foodTest.size());
+
 		foodObList = FXCollections.observableArrayList(food.getAllFoodItems());
 		FoodList.setItems(foodObList);
 		MealList.setItems(mealObList);
+		TotalFoodListItems.setText(String.valueOf(foodObList.size()));
+		
+		Collections.sort(foodObList, new Comparator<FoodItem>() {
+
+	        public int compare(FoodItem o1, FoodItem o2) {
+	            // compare two instance of `Score` and return `int` as result.
+	            return o1.getName().compareToIgnoreCase(o2.getName());
+	        }
+	    });
+
 		FoodList.setCellFactory(new Callback<ListView<FoodItem>, ListCell<FoodItem>>(){
 			 
             @Override

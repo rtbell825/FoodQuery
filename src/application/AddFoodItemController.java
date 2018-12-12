@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -34,8 +34,9 @@ public class AddFoodItemController extends PrimaryGUI{
 	private final Stage thisStage;
 	PrimaryGUI primController;
 	FoodData food;
+	private ListView<FoodItem> foodList;
 
-	public AddFoodItemController(PrimaryGUI primaryGUI) {
+	public AddFoodItemController(PrimaryGUI primaryGUI, ListView<FoodItem> list) {
 		// Create the new stage
         thisStage = new Stage();
 
@@ -56,7 +57,8 @@ public class AddFoodItemController extends PrimaryGUI{
             e.printStackTrace();
         }
         primController = primaryGUI;
-        this.food = food;
+        this.food = primController.foodDataAccess();
+        foodList = list;
 	}
 
 	// Event Listener on Button[#AddFoodItem].onAction
@@ -79,10 +81,6 @@ public class AddFoodItemController extends PrimaryGUI{
 		addedFood.addNutrient("protein", protein);
 		
 		food.addFoodItem(addedFood);
-	}
-	
-	public void allowFoodDataAccess (FoodData foodData) {
-		
 	}
 
 	public void showStage() {
