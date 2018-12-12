@@ -60,20 +60,26 @@ public class AnalyzeMealController extends PrimaryGUI{
 		primController = primaryGUI;
 		food = primController.foodDataAccess();
 		mealList = list;
-		for(int i = 0; i < mealList.size(); ++i) {
-			System.out.println(mealList.get(i).getName());
-		}
+		
 	}
 
 	// Event Listener on Button[#AnalyzeTotalMeal].onAction
 	@FXML
 	public void totalNutrientsInMeal(ActionEvent event) {
-		int cal = 550;
-		int fat = 12;
-		int carb = 10;
-		int fiber = 6;
-		int protein = 22;
+		Double cal = 0.0;
+		Double fat = 0.0;
+		Double carb = 0.0;
+		Double fiber = 0.0;
+		Double protein = 0.0;
 		
+		for(int i = 0; i < mealList.size(); ++i) {
+			cal = cal + mealList.get(i).getNutrientValue("calories");
+			fat = fat + mealList.get(i).getNutrientValue("fat");
+			carb = carb + mealList.get(i).getNutrientValue("carbohydrate");
+			fiber = fiber + mealList.get(i).getNutrientValue("fiber");
+			protein = protein + mealList.get(i).getNutrientValue("fiber");
+		}
+
 		TotalCalories.setText(String.valueOf(cal));
 		TotalFat.setText(String.valueOf(fat));
 		TotalCarbs.setText(String.valueOf(carb));
