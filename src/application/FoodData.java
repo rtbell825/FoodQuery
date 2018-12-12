@@ -25,11 +25,11 @@ public class FoodData implements FoodDataADT<FoodItem> {
     // Map of nutrients and their corresponding index
     private HashMap<String, BPTree<Double, FoodItem>> indexes;
     
-    private int branchingFactor;
+    private int branchingFactor; //branching factor used by the BPTrees
     
     private BPTree<Double, FoodItem> calTree;
     private BPTree<Double, FoodItem> fatTree;
-    private BPTree<Double, FoodItem> carbTree;
+    private BPTree<Double, FoodItem> carbTree; //stores instances of BPTrees
     private BPTree<Double, FoodItem> fiberTree;
     private BPTree<Double, FoodItem> proTree;
     
@@ -38,17 +38,17 @@ public class FoodData implements FoodDataADT<FoodItem> {
      * 
      */
     public FoodData() {
-        foodItemList = new ArrayList<FoodItem>();
-        indexes = new HashMap<String, BPTree<Double, FoodItem>>();
-        branchingFactor = 3;
+        foodItemList = new ArrayList<FoodItem>(); //data structure that stores food items
+        indexes = new HashMap<String, BPTree<Double, FoodItem>>(); //data structure that stores indices
+        branchingFactor = 3; //desired branching factor for BPTrees
         calTree = new BPTree<Double, FoodItem>(branchingFactor); 
 		fatTree = new BPTree<Double, FoodItem>(branchingFactor);
-		carbTree = new BPTree<Double, FoodItem>(branchingFactor);
+		carbTree = new BPTree<Double, FoodItem>(branchingFactor); //instantiation of all BPTrees
 		fiberTree = new BPTree<Double, FoodItem>(branchingFactor);
 		proTree = new BPTree<Double, FoodItem>(branchingFactor);
 		indexes.put("calories", calTree);
 		indexes.put("fat", fatTree);
-		indexes.put("carbohydrate", carbTree);
+		indexes.put("carbohydrate", carbTree); //placement of BPTrees into hashmap
 		indexes.put("fiber", fiberTree);
 		indexes.put("protein", proTree);
     }
@@ -63,17 +63,17 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public void loadFoodItems(String filePath) {
     	Scanner scnr = null;
-    	try {
+    	try { //tries to pull food item info from a file
     		scnr = new Scanner(new File(filePath));
-    		while (scnr.hasNextLine()) {
+    		while (scnr.hasNextLine()) { //while the file is not empty
     			try {
     				String nextLine = scnr.nextLine();
-    				if (nextLine.length() < 20) {
+    				if (nextLine.length() < 20) { //checks length of line
         				continue;
         			}
-    				String[] inputLine = nextLine.split(",");
+    				String[] inputLine = nextLine.split(","); //splits lines by comma
 	    			String id = inputLine[0];
-	    			String name = inputLine[1];
+	    			String name = inputLine[1];       //stores data from array into respective variables
 	    			String calories = inputLine[2];
 	    			double calNum = Double.parseDouble(inputLine[3]);
 	    			String fat = inputLine[4];
@@ -85,14 +85,14 @@ public class FoodData implements FoodDataADT<FoodItem> {
 	    			String protin = inputLine[10];
 	    			double proNum = Double.parseDouble(inputLine[11]);
 	    			
-	    			FoodItem curr = new FoodItem(id, name);
-	    			curr.addNutrient(calories, calNum);
+	    			FoodItem curr = new FoodItem(id, name); //creates a new food list item
+	    			curr.addNutrient(calories, calNum); //adds nutrients to food list
 	    			curr.addNutrient(fat, fatNum);
 	    			curr.addNutrient(carbohydrate, carbNum);
 	    			curr.addNutrient(fiber, fibNum);
 	    			curr.addNutrient(protin, proNum);
-	    			foodItemList.add(curr);
-	    			calTree.insert(calNum, curr);
+	    			foodItemList.add(curr); //adds item to food list
+	    			calTree.insert(calNum, curr); //inserts the nutrition values into their respective trees
 	    			fatTree.insert(fatNum, curr);
 	    			carbTree.insert(carbNum, curr);
 	    			fiberTree.insert(fibNum, curr);
@@ -118,11 +118,11 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> filterByName(String substring) {
-        ArrayList<FoodItem> returnList = new ArrayList<FoodItem>();
+        ArrayList<FoodItem> returnList = new ArrayList<FoodItem>(); 
     	substring = substring.toLowerCase();
-        for (int i = 0; i < foodItemList.size(); ++i) {
+        for (int i = 0; i < foodItemList.size(); ++i) { //iterates through food item list
         	if (foodItemList.get(i).getName().toLowerCase().contains(substring)) {
-        		returnList.add(foodItemList.get(i));
+        		returnList.add(foodItemList.get(i)); //add if name of food item contains the substring
         	}
         }
         return returnList;
@@ -152,7 +152,6 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void addFoodItem(FoodItem foodItem) {
-    	// Need to make this alphanumeric? How?
         foodItemList.add(foodItem);
         HashMap<String, Double> nutrients = foodItem.getNutrients();
         indexes.get("calories").insert(nutrients.get("calories"), foodItem);
