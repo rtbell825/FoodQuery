@@ -185,7 +185,6 @@ public class FoodData implements FoodDataADT<FoodItem> {
 						+ curr.getNutrients().get("calories") + "," + "fat," + curr.getNutrients().get("fat") + "," 
 						+ "carbohydrate" + "," + curr.getNutrients().get("carbohydrate") + "," + "fiber" + ","
 						+ curr.getNutrients().get("fiber") + "," + "protein" + "," + curr.getNutrients().get("protein"));
-				
 			}
 			
 		} catch (IOException e) {
