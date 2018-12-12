@@ -68,7 +68,7 @@ public class FoodDataTest {
 	}
 	
 	@Test
-	public void testLoadFoodItemsTwoKeySort() {
+	public void testFilterNameTwoKeySort() {
 		FoodData oneFood = new FoodData();
 		FoodItem newFood = new FoodItem("id", "name");
 		newFood.addNutrient("calories", 5);
@@ -93,7 +93,7 @@ public class FoodDataTest {
 	}
 	
 	@Test
-	public void testLoadFoodItemsTwoKeyBP() {
+	public void testFilterNutrientsTwoKeyBPE() {
 		FoodData oneFood = new FoodData();
 		FoodItem newFood = new FoodItem("id", "name");
 		newFood.addNutrient("calories", 5);
@@ -113,12 +113,92 @@ public class FoodDataTest {
 		rules.add("calories");
 		rules.add("==");
 		rules.add("5");
-		if (oneFood.filterByNutrients(rules).get(0).getID().equals("id")) {
+		if (oneFood.filterByNutrients(rules).get(0).getID().equals("id") && oneFood.filterByNutrients(rules).size() == 1) {
 			assertTrue(true);
 		}
 		else {
 			fail("Fuck...");
 		}
+	}
+	
+	@Test
+	public void testFilterNutrientsTwoKeyBPL() {
+		FoodData oneFood = new FoodData();
+		FoodItem newFood = new FoodItem("id", "name");
+		newFood.addNutrient("calories", 5);
+		newFood.addNutrient("fat", 250);
+		newFood.addNutrient("carbohydrate", 69);
+		newFood.addNutrient("fiber", 50);
+		newFood.addNutrient("protein", 40);
+		oneFood.addFoodItem(newFood);
+		FoodItem newFood2 = new FoodItem("id2", "nana");
+		newFood2.addNutrient("calories", 50);
+		newFood2.addNutrient("fat", 2500);
+		newFood2.addNutrient("carbohydrate", 690);
+		newFood2.addNutrient("fiber", 500);
+		newFood2.addNutrient("protein", 400);
+		oneFood.addFoodItem(newFood2);
+		ArrayList<String> rules = new ArrayList<String>();
+		rules.add("calories");
+		rules.add("<");
+		rules.add("10");
+		if (oneFood.filterByNutrients(rules).get(0).getID().equals("id") && oneFood.filterByNutrients(rules).size() == 1) {
+			assertTrue(true);
+		}
+		else {
+			fail("Fuck...");
+		}
+	}
+	
+	@Test
+	public void testFilterNutrientsTwoKeyBPG() {
+		FoodData oneFood = new FoodData();
+		FoodItem newFood = new FoodItem("id", "name");
+		newFood.addNutrient("calories", 5);
+		newFood.addNutrient("fat", 250);
+		newFood.addNutrient("carbohydrate", 69);
+		newFood.addNutrient("fiber", 50);
+		newFood.addNutrient("protein", 40);
+		oneFood.addFoodItem(newFood);
+		FoodItem newFood2 = new FoodItem("id2", "nana");
+		newFood2.addNutrient("calories", 50);
+		newFood2.addNutrient("fat", 2500);
+		newFood2.addNutrient("carbohydrate", 690);
+		newFood2.addNutrient("fiber", 500);
+		newFood2.addNutrient("protein", 400);
+		oneFood.addFoodItem(newFood2);
+		ArrayList<String> rules = new ArrayList<String>();
+		rules.add("calories");
+		rules.add(">");
+		rules.add("10");
+		if (oneFood.filterByNutrients(rules).get(0).getID().equals("id") && oneFood.filterByNutrients(rules).size() == 1) {
+			assertTrue(true);
+		}
+		else {
+			fail("Fuck...");
+		}
+	}
+	
+	
+	@Test
+	public void testSaveFoodItemsTwoKeys() {
+		FoodData oneFood = new FoodData();
+		FoodItem newFood = new FoodItem("id", "name");
+		newFood.addNutrient("calories", 5);
+		newFood.addNutrient("fat", 250);
+		newFood.addNutrient("carbohydrate", 69);
+		newFood.addNutrient("fiber", 50);
+		newFood.addNutrient("protein", 40);
+		oneFood.addFoodItem(newFood);
+		FoodItem newFood2 = new FoodItem("id2", "nana");
+		newFood2.addNutrient("calories", 50);
+		newFood2.addNutrient("fat", 2500);
+		newFood2.addNutrient("carbohydrate", 690);
+		newFood2.addNutrient("fiber", 500);
+		newFood2.addNutrient("protein", 400);
+		oneFood.addFoodItem(newFood2);
+		
+		oneFood.saveFoodItems("fileTest.txt");
 	}
 
 }
