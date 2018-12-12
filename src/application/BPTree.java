@@ -53,25 +53,25 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
      */
     @Override
     public void insert(K key, V value) {
-        if (key == null)
+        if (key == null) //if key is null, end insert method
             return;
         if (root == null ) { //if root references null...
-            LeafNode n = new LeafNode(); //create a new LeafNode and insert the KV pair and set root
+            LeafNode n = new LeafNode(); //create a new LeafNode and insert the KV pair and reset root
             n.insert(key, value);
             root = n;
         }
-        else {
-            root.insert(key, value);
-            if (root.isOverflow()) {
-                Node newChild = root.split();
-                K newKey = newChild.getFirstLeafKey();
+        else { //otherwise root is not null
+            root.insert(key, value); //inserts K:V into root
+            if (root.isOverflow()) { //if the root is Overflow
+                Node newChild = root.split(); //split the root and save sister node
+                K newKey = newChild.getFirstLeafKey(); 
                 
-                InternalNode newParent = new InternalNode();
-                newParent.children.add(root);
+                InternalNode newParent = new InternalNode(); //new parent node
+                newParent.children.add(root); //add root and sister node to parent's children
                 newParent.children.add(newChild);
-                newParent.keys.add(newKey);
+                newParent.keys.add(newKey); //add key to parent's list of keys
                 
-                root = newParent;
+                root = newParent; //reset root to parent
             }
         }  
     }
@@ -84,7 +84,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
     @Override
     public List<V> rangeSearch(K key, String comparator) {
         if (!comparator.contentEquals(">=") && 
-            !comparator.contentEquals("==") && 
+            !comparator.contentEquals("==") && //If comparator is not one of these three strings, return empty array
             !comparator.contentEquals("<=") )
             return new ArrayList<V>();
         
@@ -222,11 +222,11 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#isOverflow()
          */
         boolean isOverflow() {
-            if (children.size() > branchingFactor) {
+            if (children.size() > branchingFactor) { //checks if the children size is greater than the branching factor
                 return true;
             }
             else {
-                return false;
+                return false; 
             }
         }
         
@@ -235,36 +235,36 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#insert(java.lang.Comparable, java.lang.Object)
          */
         void insert(K key, V value) {
-            Node chosenChild = null;
-            for (int i = 0; i <= keys.size(); i++) {
+            Node chosenChild = null; //variable that tracks node chosen to insert into
+            for (int i = 0; i <= keys.size(); i++) { //iterate through keys list
                 if (i == keys.size()) { //if this is true, then key was greater or equal to every key in the key list
-                    chosenChild = children.get(i);
+                    chosenChild = children.get(i); //chosenChild is set to "right-most" child
                     children.get(i).insert(key, value); //insert at "right-most" child
-                    break;
+                    break; //after method calls return, break for loop
                 }
                 if (key.compareTo(keys.get(i)) <= 0) { //if a key is found in key list that is greater than current key
-                    chosenChild = children.get(i);
-                    children.get(i).insert(key, value);//the current key, insert into corresponding child
-                    break;
+                    chosenChild = children.get(i); //chosenChild is set to child that pertains to that key
+                    children.get(i).insert(key, value); //insert the current key into corresponding child
+                    break; //after method calls return, break for loop
                 }
             }
-            if (chosenChild.isOverflow()) {
-                Node newChild = chosenChild.split();
-                K newKey = newChild.getFirstLeafKey();
-                for(int j = 0; j <= keys.size(); j++) {
-                    if(j == keys.size()) {
+            if (chosenChild.isOverflow()) { //checks if the child that was inserted into is Overflow
+                Node newChild = chosenChild.split(); //if it is, splits and saves reference to new sibling
+                K newKey = newChild.getFirstLeafKey(); //gets first leaf key of new sibling
+                for(int j = 0; j <= keys.size(); j++) { //for loop that iterates through keys list of this.node
+                    if(j == keys.size()) { //if this is true, then the newKey was greater than every key in key list
                         keys.add(newKey);
                         children.add(newChild);
                         break;
                     }
-                    if (newKey.compareTo(keys.get(j)) < 0) {
-                        
-                        int c = j;
+                    if (newKey.compareTo(keys.get(j)) < 0) { //if newKey is less than a key in list...
+                        int c = j; //temp index that starts at j
                         while (children.get(c).getFirstLeafKey().compareTo(newKey) <= 0) {
+                            //iterates through children until one is found that is greater than newKey
                             c++;
                         }
-                        children.add(c, newChild);
-                        keys.add(j, newKey);
+                        children.add(c, newChild); //add newChild at proper index
+                        keys.add(j, newKey); //same with key
                         break;
                     }
                 }
@@ -276,15 +276,17 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#split()
          */
         Node split() {
-            InternalNode sister = new InternalNode();
-            int halfKeyIndex = keys.size() / 2;
-            int halfChiIndex = children.size() / 2;
+            InternalNode sister = new InternalNode(); //new internal for sibling
+            int halfKeyIndex = keys.size() / 2; //index halfway through the key list
+            int halfChiIndex = children.size() / 2; //index halfway through the children list
             
-            sister.keys.addAll(keys.subList(halfKeyIndex + 1, keys.size()));
-            sister.children.addAll(children.subList(halfChiIndex, children.size()));
-            // Deletes keys and values added to sister node from original.
-            keys.subList(halfKeyIndex, keys.size()).clear();
-            children.subList(halfChiIndex, children.size()).clear();
+            sister.keys.addAll(keys.subList(halfKeyIndex + 1, keys.size())); //adds all keys from half index to end of list
+                                                                             //...to sister key list
+            sister.children.addAll(children.subList(halfChiIndex, children.size())); //adds all children from half index to
+                                                                                     //...end of list to sister children list
+            
+            keys.subList(halfKeyIndex, keys.size()).clear(); //Deletes last half of keys from this nodes key list
+            children.subList(halfChiIndex, children.size()).clear(); //deletes last half of children from this nodes child list
             
             return sister;
         }
@@ -294,20 +296,19 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#rangeSearch(java.lang.Comparable, java.lang.String)
          */
         List<V> rangeSearch(K key, String comparator) {
-               for(int i = 0; i <= keys.size(); i++) {
-                   if (i == keys.size()) { //if this is true, that means that key was bigger than every key in this node's
-                       //...list of keys
-                       return children.get(i).rangeSearch(key, comparator);
-                   }
-                   else if (key.compareTo(keys.get(i)) == -1) {
-                       return children.get(i).rangeSearch(key, comparator);
-                   }
-               }
-               return null; //shouldn't ever reach this line
-           }
+            for(int i = 0; i <= keys.size(); i++) { //iterates through keys list
+                if (i == keys.size()) { //if this is true, that means that key was greater than or equals to
+                    //...every key in this node's list of keys
+                    return children.get(i).rangeSearch(key, comparator); //call rangeSearch on last node in list
+                }
+                else if (key.compareTo(keys.get(i)) == -1) { //true if a key in keys list is greater than key param
+                    return children.get(i).rangeSearch(key, comparator); //call rangeSearch on node at index
+                }
+            }
+            return null; //shouldn't ever reach this line
+        }
     
-    } // End of class InternalNode
-    
+    } // End of class InternalNode   
     
     /**
      * This class represents a leaf node of the tree.
@@ -334,7 +335,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         LeafNode() {
             super();
             values = new ArrayList<V>();
-            next = null;
+            next = null; //next and previous null by default
             previous = null;
         }
         
@@ -343,7 +344,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#getFirstLeafKey()
          */
         K getFirstLeafKey() {
-            return keys.get(0);
+            return keys.get(0); //first leaf key in the list
         }
         
         /**
@@ -351,7 +352,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#isOverflow()
          */
         boolean isOverflow() {
-            if(values.size() >= branchingFactor) {
+            if(values.size() >= branchingFactor) { //checks if values list size is greater than or equal to BF
                 return true;
             }
             else {
@@ -364,16 +365,16 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#insert(Comparable, Object)
          */
         void insert(K key, V value) {
-            for(int i = 0; i <= keys.size(); i++) { //NOTE: it is intentionally left as <= ...read here v
+            for(int i = 0; i <= keys.size(); i++) { //iterates through keys list
                 if (i == keys.size()) { //if the index has reached the last element of the list, and the key
-                    //...was still greater, add it to the end
+                                        //...was still greater, add it to the end
                     keys.add(key);
-                    values.add(value);
+                    values.add(value); //add key and value at end of lists
                     break;
                 }
-                if (key.compareTo(keys.get(i)) <= 0) { //key is smaller than key at index i
+                if (key.compareTo(keys.get(i)) <= 0) { //key is less than or equal to key at index i...
                     keys.add(i, key);
-                    values.add(i, value);
+                    values.add(i, value); //add key and value in position
                     break;
                 }
             }
@@ -384,17 +385,18 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#split()
          */
         Node split() {
-            LeafNode sister = new LeafNode();
-            sister.next = this.next;
-            this.next = sister;
-            sister.previous = this;
+            LeafNode sister = new LeafNode(); //new leaf node to store sibling data
+            sister.next = this.next; //reset sister's next to this node
+            this.next = sister; //reset this node's next to sister
+            sister.previous = this; //reset sister's previous to this node
 
-            int halfKeyIndex = keys.size() / 2; //will yield desired half index for even or odd lists
-            int halfValIndex = values.size() / 2;
-            // Inserts keys and values from half index of list to end into sister.
+            int halfKeyIndex = keys.size() / 2; //half index of key list
+            int halfValIndex = values.size() / 2; //half index of value list
+            //Inserts keys and values from half index of list to end into sister.
             sister.keys.addAll(keys.subList(halfKeyIndex, keys.size()));
             sister.values.addAll(values.subList(halfValIndex, values.size()));
-            // Deletes keys and values added to sister node from original.
+            
+            //Deletes keys and values added to sister node from original.
             keys.subList(halfKeyIndex, keys.size()).clear();
             values.subList(halfValIndex, values.size()).clear();
             
@@ -406,68 +408,61 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#rangeSearch(Comparable, String)
          */
         List<V> rangeSearch(K key, String comparator) {
-            if (comparator.contentEquals(">=")) {
-                //return the list of values that is greater than or equal to the key
-                List<V> greaterList = new ArrayList<V>();
-                LeafNode curr = this;
-                do {
-                    for(int i = 0; i < curr.keys.size(); i++) {
+            if (comparator.contentEquals(">=")) { //return the list of values that is greater than or equal to the key
+                List<V> greaterList = new ArrayList<V>(); //list to store greater values
+                LeafNode curr = this; //current node set to this node
+                do { //do while loop to iterate through all next nodes in linked list
+                    for(int i = 0; i < curr.keys.size(); i++) { //iterates through all keys in current node
                         if (key.compareTo(curr.keys.get(i)) <= 0) { //value in key list is equal to or greater than key
-                            //we want to add all values to the "right" of this value to a list and return that list
-                            greaterList.add(curr.values.get(i));
+                            greaterList.add(curr.values.get(i)); //adds all values "to the right" of initial value
                         }
                     }
-                    curr = curr.next;
-                } while (curr != null);
+                    curr = curr.next; //reset current node to its next node
+                } while (curr != null); //while current node isn't equal to null, continue
                 return greaterList;
             }
-            else if (comparator.contentEquals("<=")) {
-                //return the list of values that is less than or equal to the key
-                List<V> lesserList = new ArrayList<V>();
-                LeafNode curr = this;
-                do {
-                    for(int i = curr.keys.size() - 1; i >= 0; i--) {
+            else if (comparator.contentEquals("<=")) { //return the list of values that is less than or equal to the key
+                List<V> lesserList = new ArrayList<V>(); //list to store lesser values
+                LeafNode curr = this; //current node set to this node
+                do { //do while loop to iterate through all previous nodes in linked list
+                    for(int i = curr.keys.size() - 1; i >= 0; i--) { //iterates (in reverse) through all keys in current node
                         if (key.compareTo(curr.keys.get(i)) >= 0) { //value in key list is equal to or less than key
-                            //we want to add all values to the "left" of this value to a list and return that list
-                            lesserList.add(curr.values.get(i));
+                            lesserList.add(curr.values.get(i)); //adds all values "to the left" of initial value
                         }
                     }
-                    curr = curr.previous;
-                } while (curr != null);
+                    curr = curr.previous; //reset current node to its previous node
+                } while (curr != null); //while current node isn't equal to null, continue
                 //the above loop yields a list in reverse order...
-                Collections.reverse(lesserList);
+                Collections.reverse(lesserList); //...reverses the list
                 return lesserList;
             }
-            else {
-                //return a list of values that are equal to the key
-                List<V> equalList = new ArrayList<V>();
-                LeafNode curr = this;
-                do {
-                    for(int i = 0; i < curr.keys.size(); i++) {
-                        if (key.compareTo(curr.keys.get(i)) == 0) { //value in key list is equal to or greater than key
-                            //we want to add all values to the "right" of this value to a list and return that list
-                            equalList.add(curr.values.get(i));
+            else { //return a list of values that are equal to the key
+                List<V> equalList = new ArrayList<V>(); //list to store equal values
+                LeafNode curr = this; //current node set to this node
+                do { //do while loop to iterate through all nodes to "right" of current node
+                    for(int i = 0; i < curr.keys.size(); i++) { //iterates through key list of current node
+                        if (key.compareTo(curr.keys.get(i)) == 0) { //value in key list is equal to key
+                            equalList.add(curr.values.get(i)); //adds all values that are equal to list
                         }
                     }
-                    curr = curr.next;
-                } while (curr != null);
-                //return the list of values that is less than or equal to the key
-                curr = this.previous;
-                if (curr != null) {
-                    do {
-                        for(int i = curr.keys.size() - 1; i >= 0; i--) {
-                            if (key.compareTo(curr.keys.get(i)) == 0) { //value in key list is equal to or less than key
-                                //we want to add all values to the "left" of this value to a list and return that list
-                                equalList.add(curr.values.get(i));
+                    curr = curr.next; //reset current node to its next node
+                } while (curr != null); //while current node isn't equal to null, continue
+                
+                //we now have all values equal to key from the "right" side of the linked list
+                
+                curr = this.previous; //reset current node to this node's previous node
+                if (curr != null) { //checks if current node isn't null
+                    do { //do while loop to iterate through all nodes to "left" of current node 
+                        for(int i = curr.keys.size() - 1; i >= 0; i--) { //iterate through key list of current node backwards
+                            if (key.compareTo(curr.keys.get(i)) == 0) { //value in key list is equal to key
+                                equalList.add(curr.values.get(i)); //adds all values that are equal to list
                             }
                         }
-                        curr = curr.previous;
-                    } while (curr != null);
+                        curr = curr.previous; //reset current node to its previous node
+                    } while (curr != null); //while current node isn't equal to null, continue
                 }
-                //the above loop yields a list in reverse order...
                 return equalList;
-            }
-                
+            }     
         }
         
     } // End of class LeafNode
