@@ -7,11 +7,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -26,7 +29,8 @@ public class PrimaryGUI{
 
 	private FoodData food;
 	private final Stage thisStage;
-	private ObservableList<FoodItem> observableList = FXCollections.observableArrayList();
+	private ObservableList<FoodItem> foodObList = FXCollections.observableArrayList();
+	private ObservableList<FoodItem> mealObList = FXCollections.observableArrayList();
 	
 	@FXML
 	private MenuItem Reset;
@@ -39,7 +43,7 @@ public class PrimaryGUI{
 	@FXML
 	private ListView<FoodItem> FoodList = new ListView<>();
 	@FXML
-	private ListView<FoodItem>  MealList;
+	private ListView<FoodItem> MealList = new ListView<>();;
 	@FXML
 	private Button AddToMealList;
 	@FXML
@@ -66,7 +70,10 @@ public class PrimaryGUI{
 	private Button AnalyzeMeal;
 
 
-	public PrimaryGUI(FoodData food) {
+	public PrimaryGUI() {
+		food = new FoodData();
+		food.loadFoodItems("foodItems.csv");
+		
 		thisStage = new Stage();
 		try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FoodAnalyzer.fxml"));
@@ -83,12 +90,16 @@ public class PrimaryGUI{
         } catch (IOException e) {
             e.printStackTrace();
         }
-		this.food = food;
+		
 		
 	}
 	// Event Listener on Button[#AddToMealList].onAction
 	@FXML
 	public void addToMealList(ActionEvent event) {
+		FoodItem currItem = FoodList.getSelectionModel().getSelectedItem();
+		
+		mealObList.add(currItem);
+		
 		
 	}
 	// Event Listener on Button[#RemoveFromMealList].onAction
@@ -99,7 +110,7 @@ public class PrimaryGUI{
 	// Event Listener on Button[#AddToFoodList].onAction
 	@FXML
 	public void launchAddFoodWindow(ActionEvent event) {
-		AddFoodItemController controller2 = new AddFoodItemController(this, food);
+		AddFoodItemController controller2 = new AddFoodItemController(this);
 		controller2.showStage();
 		
 		/*
@@ -130,7 +141,9 @@ public class PrimaryGUI{
 	// Event Listener on Button[#AnalyzeMeal].onAction
 	@FXML
 	public void launchMealAnalyzerWindow(ActionEvent event) {
-		AnalyzeMealController controller3 = new AnalyzeMealController(this, food);
+		List<FoodItem> analyzerList = new ArrayList<FoodItem>();
+		analyzerList = mealObList;
+		AnalyzeMealController controller3 = new AnalyzeMealController(this, analyzerList);
 		controller3.showStage();
 		
 		/*
@@ -170,16 +183,61 @@ public class PrimaryGUI{
 		
 	}
 
-	public void foodDataAccess(FoodData food) {
-		this.food = food;
+	public FoodData foodDataAccess() {
+		return food;
 	}
 	public void showStage() {
 		thisStage.showAndWait();
 	}
 	
 	public void initialize() {
-
-        FoodList.setItems(observableList);
+		//List<FoodItem> foodTest = new ArrayList<FoodItem>();
+		//foodTest = food.getAllFoodItems();
+		//System.out.println(foodTest.size());
+		foodObList = FXCollections.observableArrayList(food.getAllFoodItems());
+		FoodList.setItems(foodObList);
+		MealList.setItems(mealObList);
+		FoodList.setCellFactory(new Callback<ListView<FoodItem>, ListCell<FoodItem>>(){
+			 
+            @Override
+            public ListCell<FoodItem> call(ListView<FoodItem> p) {
+                 
+                ListCell<FoodItem> cell = new ListCell<FoodItem>(){
+ 
+                    @Override
+                    protected void updateItem(FoodItem t, boolean flag) {
+                        super.updateItem(t, flag);
+                        if (t != null) {
+                            setText(t.getName());
+                        }
+                    }
+ 
+                };
+                 
+                return cell;
+            }
+        });
+		
+		MealList.setCellFactory(new Callback<ListView<FoodItem>, ListCell<FoodItem>>(){
+			 
+            @Override
+            public ListCell<FoodItem> call(ListView<FoodItem> a) {
+                 
+                ListCell<FoodItem> cell = new ListCell<FoodItem>(){
+ 
+                    @Override
+                    protected void updateItem(FoodItem t, boolean flag) {
+                        super.updateItem(t, flag);
+                        if (t != null) {
+                            setText(t.getName());
+                        }
+                    }
+ 
+                };
+                 
+                return cell;
+            }
+        });
 		
 	}
 }

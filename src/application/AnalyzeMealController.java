@@ -10,12 +10,13 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 
-public class AnalyzeMealController {
+public class AnalyzeMealController extends PrimaryGUI{
 	@FXML
 	private Label TotalCalories;
 	@FXML
@@ -31,11 +32,12 @@ public class AnalyzeMealController {
 	@FXML
 	private PieChart Chart;
 	
-	public FoodData food;
-	PrimaryGUI primController;
+	private FoodData food;
+	private PrimaryGUI primController;
 	private final Stage thisStage;
+	private List<FoodItem> mealList;
 
-	public AnalyzeMealController(PrimaryGUI primaryGUI, FoodData food) {
+	public AnalyzeMealController(PrimaryGUI primaryGUI, List<FoodItem> list) {
 		// Create the new stage
         thisStage = new Stage();
 
@@ -56,7 +58,11 @@ public class AnalyzeMealController {
             e.printStackTrace();
         }
 		primController = primaryGUI;
-		this.food = food;
+		food = primController.foodDataAccess();
+		mealList = list;
+		for(int i = 0; i < mealList.size(); ++i) {
+			System.out.println(mealList.get(i).getName());
+		}
 	}
 
 	// Event Listener on Button[#AnalyzeTotalMeal].onAction

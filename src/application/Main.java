@@ -19,10 +19,8 @@ public class Main extends Application {
 	public void start(Stage stage) {
 		
 		//These lines are to test FoodData.java
-		FoodData food = new FoodData();
-		food.loadFoodItems("foodItems.csv");
 		
-		PrimaryGUI controller = new PrimaryGUI(food);
+		PrimaryGUI controller = new PrimaryGUI();
 		controller.showStage();
 		
 		/*

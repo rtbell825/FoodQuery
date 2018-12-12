@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import javafx.event.ActionEvent;
 
-public class AddFoodItemController {
+public class AddFoodItemController extends PrimaryGUI{
 	
 	@FXML
 	private TextField FoodName;
@@ -35,7 +35,7 @@ public class AddFoodItemController {
 	PrimaryGUI primController;
 	FoodData food;
 
-	public AddFoodItemController(PrimaryGUI primaryGUI, FoodData food) {
+	public AddFoodItemController(PrimaryGUI primaryGUI) {
 		// Create the new stage
         thisStage = new Stage();
 
