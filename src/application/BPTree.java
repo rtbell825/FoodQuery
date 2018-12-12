@@ -1,4 +1,4 @@
-package application;
+//package application;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -270,7 +270,13 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                 }
             }
             if (chosenChild.isOverflow()) {
+//                System.out.println("child before split: " + chosenChild);
+//                System.out.println("\nchildren: " + children.toString() + "\n");
                 Node newChild = chosenChild.split();
+//                System.out.println("\nchildren: " + children.toString() + "\n");
+                
+//                System.out.println("old node: " + chosenChild);
+//                System.out.println("sister: " + newChild);
                 K newKey = newChild.getFirstLeafKey();
                 for(int j = 0; j <= keys.size(); j++) {
                     if(j == keys.size()) {
@@ -281,7 +287,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                     if (newKey.compareTo(keys.get(j)) < 0) { //TODO
                         
                         int c = j;
-                        while (children.get(c).getFirstLeafKey().compareTo(newKey) < 0) {
+                        while (children.get(c).getFirstLeafKey().compareTo(newKey) <= 0) {
                             c++;
                         }
                         children.add(c, newChild);
@@ -415,8 +421,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         Node split() {
             LeafNode sister = new LeafNode();
-
-            next = sister;
+            sister.next = this.next;
+            this.next = sister;
             sister.previous = this;
 
             int halfKeyIndex = keys.size() / 2; //will yield desired half index for even or odd lists
@@ -444,10 +450,17 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                     for(int i = 0; i < curr.keys.size(); i++) {
                         if (key.compareTo(curr.keys.get(i)) <= 0) { //value in key list is equal to or greater than key
                             //we want to add all values to the "right" of this value to a list and return that list
-                            greaterList.add(values.get(i));
+//                            System.out.println("\nkeys size: " + curr.keys.size() + "\n");
+//                            System.out.println("\nvalues size: " + curr.values.size() + "\n");
+//                            System.out.println("i: " + i);
+                            greaterList.add(curr.values.get(i));
                         }
                     }
-                    curr = this.next;
+//                    System.out.println(curr.equals(next));
+//                    System.out.println("curr: " + curr);
+//                    System.out.println("next: " + next);
+//                    System.out.println("this.next: " + this.next);
+                    curr = curr.next;
                 } while (curr != null);
                 return greaterList;
             }
@@ -459,10 +472,10 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                     for(int i = curr.keys.size() - 1; i >= 0; i--) {
                         if (key.compareTo(curr.keys.get(i)) >= 0) { //value in key list is equal to or less than key
                             //we want to add all values to the "left" of this value to a list and return that list
-                            lesserList.add(values.get(i));
+                            lesserList.add(curr.values.get(i));
                         }
                     }
-                    curr = this.previous;
+                    curr = curr.previous;
                 }while (curr != null);
                 //the above loop yields a list in reverse order...
                 Collections.reverse(lesserList);
@@ -473,11 +486,28 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                 //TODO: Not yet designed to handle duplicate values in multiple leaf nodes, only duplicates in
                 //...this leaf node
                 List<V> equalList = new ArrayList<V>();
-                for (int i = 0; i < keys.size(); i++) {
-                    if (key.compareTo(keys.get(i)) == 0) {
-                        equalList.add(values.get(i));
+//                for (int i = 0; i < keys.size(); i++) {
+//                    if (key.compareTo(keys.get(i)) == 0) {
+//                        equalList.add(values.get(i));
+//                    }
+//                }
+                LeafNode curr = this;
+                do {
+                    for(int i = 0; i < curr.keys.size(); i++) {
+                        if (key.compareTo(curr.keys.get(i)) == 0) { //value in key list is equal to or greater than key
+                            //we want to add all values to the "right" of this value to a list and return that list
+//                            System.out.println("\nkeys size: " + curr.keys.size() + "\n");
+//                            System.out.println("\nvalues size: " + curr.values.size() + "\n");
+//                            System.out.println("i: " + i);
+                            equalList.add(curr.values.get(i));
+                        }
                     }
-                }
+//                    System.out.println(curr.equals(next));
+//                    System.out.println("curr: " + curr);
+//                    System.out.println("next: " + next);
+//                    System.out.println("this.next: " + this.next);
+                    curr = curr.next;
+                } while (curr != null);
                 return equalList;
             }
         }
@@ -493,7 +523,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
      * @param args
      */
     
-    /*
+    
     public static void main(String[] args) {
         // create empty BPTree with branching factor of 3
         BPTree<Double, Double> BPTree = new BPTree<>(3);
@@ -511,20 +541,30 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         // just that it functions as a data structure with
         // insert, rangeSearch, and toString() working.
         List<Double> list = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            Double j = dd[rnd1.nextInt(4)];
-            list.add(j);
-            BPTree.insert(j, j);
-            System.out.println("\n\nTree structure:\n" + BPTree.toString());
-        }
-        List<Double> filteredValues = BPTree.rangeSearch(0.2d, ">=");
+//        for (int i = 0; i < 5; i++) {
+//            Double j = dd[rnd1.nextInt(4)];
+//            list.add(j);
+//            BPTree.insert(j, j);
+//            System.out.println("\n\nTree structure:\n" + BPTree.toString());
+//        }
+        BPTree.insert(0.2, 0.2);
+        System.out.println("\n\nTree structure:\n" + BPTree.toString());
+        BPTree.insert(0.0, 0.0);
+        System.out.println("\n\nTree structure:\n" + BPTree.toString());
+        BPTree.insert(0.5, 0.5);
+        System.out.println("\n\nTree structure:\n" + BPTree.toString());
+        BPTree.insert(0.2, 0.2);
+        System.out.println("\n\nTree structure:\n" + BPTree.toString());
+        BPTree.insert(0.5 ,0.5);
+        System.out.println("\n\nTree structure:\n" + BPTree.toString());
+        List<Double> filteredValues = BPTree.rangeSearch(0.2d, "=");
         System.out.println("Filtered values: " + filteredValues.toString());
     }
-    */
     
     
-    public static void main(String[] args) {
-        BPTree<Integer, Integer> BPTree = new BPTree<>(3);
+    
+//    public static void main(String[] args) {
+//        BPTree<Integer, Integer> BPTree = new BPTree<>(3);
 //        BPTree.insert(null, null);
 //        BPTree.insert(0, 0);
 //        BPTree.insert(0, 0);
@@ -536,46 +576,50 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 //        BPTree.insert(0, 0);
 //        System.out.println("Tree:\n" + BPTree.toString());
 //        BPTree.insert(3, 3);
-        BPTree.insert(80,80);
-        BPTree.insert(3, 3);
-        BPTree.insert(-1, -1);
-        BPTree.insert(0, 0);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(8, 8);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(0, 0);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(5, 5);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(2, 2);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(42, 42);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(28, 28);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(24, 24);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(10, 10);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(14, 14);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(3, 3);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(7, 7);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(6, 6);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(9, 9);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(4, 4);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(1, 1);
-        System.out.println("Tree:\n" + BPTree.toString());
-        BPTree.insert(27, 27);
-        System.out.println("Tree:\n" + BPTree.toString());
-        
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(80,80);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(3, 3);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(-1, -1);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(0, 0);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(8, 8);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(0, 0);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(5, 5);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(2, 2);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(42, 42);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(28, 28);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(24, 24);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(10, 10);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(14, 14);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(3, 3);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(7, 7);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(6, 6);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(9, 9);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(4, 4);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(1, 1);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        BPTree.insert(27, 27);
+//        System.out.println("Tree:\n" + BPTree.toString());
+//        
 
-    }
+//    }
     
 
 } // End of class BPTree
