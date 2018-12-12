@@ -3,7 +3,6 @@ package application;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -198,9 +197,17 @@ public class FoodDataTest {
 		newFood2.addNutrient("protein", 400);
 		oneFood.addFoodItem(newFood2);
 		
+		FoodItem newFood3 = new FoodItem("id1", "Apple");
+		newFood3.addNutrient("calories", 50);
+		newFood3.addNutrient("fat", 2500);
+		newFood3.addNutrient("carbohydrate", 690);
+		newFood3.addNutrient("fiber", 500);
+		newFood3.addNutrient("protein", 400);
+		oneFood.addFoodItem(newFood3);
+		
 		oneFood.saveFoodItems("fileTest.txt");
 		oneFood.loadFoodItems("fileTest.txt");
-		if (oneFood.getAllFoodItems().get(1).getID().equals("id2")) {
+		if (oneFood.getAllFoodItems().get(2).getID().equals("id2")) {
 			assertTrue(true);
 		}
 		else {

@@ -3,11 +3,12 @@ import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.Scanner;
 import java.io.IOException;
-import java.io.FileWriter;
 import java.io.PrintWriter;
 
 
@@ -174,6 +175,11 @@ public class FoodData implements FoodDataADT<FoodItem> {
 
 	@Override
 	public void saveFoodItems(String filename) {
+		Collections.sort(foodItemList, new Comparator<FoodItem>() {
+			public int compare(FoodItem o1, FoodItem o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
 		File file = null;
 		PrintWriter printWriter = null;
 		try {
