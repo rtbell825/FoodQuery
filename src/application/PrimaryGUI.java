@@ -156,7 +156,6 @@ public class PrimaryGUI{
 		if(chosenFile != "") {
 			food = new FoodData();
 			food.loadFoodItems(chosenFile);
-			System.out.println(foodObList.size());
 		}
 		initialize();
 	}

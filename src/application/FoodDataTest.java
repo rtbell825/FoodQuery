@@ -131,7 +131,7 @@ public class FoodDataTest {
 		newFood.addNutrient("protein", 40);
 		oneFood.addFoodItem(newFood);
 		FoodItem newFood2 = new FoodItem("id2", "nana");
-		newFood2.addNutrient("calories", 50);
+		newFood2.addNutrient("calories", 90);
 		newFood2.addNutrient("fat", 2500);
 		newFood2.addNutrient("carbohydrate", 690);
 		newFood2.addNutrient("fiber", 500);
