@@ -16,6 +16,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 
+/**
+ * Controller class that allows a user to analyze the nutritional content of their selected
+ * meal list
+ * 
+ * @author Harrison
+ *
+ */
 public class AnalyzeMealController extends PrimaryGUI{
 	@FXML
 	private Label TotalCalories;
@@ -37,6 +44,12 @@ public class AnalyzeMealController extends PrimaryGUI{
 	private final Stage thisStage;
 	private List<FoodItem> mealList;
 
+	/**
+	 * Constructor to initialize window and assign required parameters to field variables
+	 * 
+	 * @param primaryGUI - allows access to primaryGUI, therefore to FoodData
+	 * @param list - meal list passed in to be analyzed
+	 */
 	public AnalyzeMealController(PrimaryGUI primaryGUI, List<FoodItem> list) {
 		// Create the new stage
         thisStage = new Stage();
@@ -62,7 +75,9 @@ public class AnalyzeMealController extends PrimaryGUI{
 		mealList = list;
 		
 	}
-
+	
+	// Pulls and tracks all nutrient values for each food item in the meal list.
+	// Displays total values in GUI through labels and a pie chart.
 	// Event Listener on Button[#AnalyzeTotalMeal].onAction
 	@FXML
 	public void totalNutrientsInMeal(ActionEvent event) {
