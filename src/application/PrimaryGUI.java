@@ -224,10 +224,6 @@ public class PrimaryGUI{
 		if(chosenFile != "") {
 			food = new FoodData();
 			food.loadFoodItems(chosenFile);
-<<<<<<< HEAD
-=======
-
->>>>>>> eaaf5ff56ba84bc143e0f36641447cc0685974dc
 		}
 		initialize();
 	}
