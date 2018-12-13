@@ -12,6 +12,13 @@ import java.io.IOException;
 
 import javafx.event.ActionEvent;
 
+/**
+ * Controller that allows a user to input values in order to create a custom food item
+ * and add it to the current food list
+ * 
+ * @author Harrison
+ *
+ */
 public class AddFoodItemController extends PrimaryGUI{
 	
 	@FXML
@@ -34,9 +41,15 @@ public class AddFoodItemController extends PrimaryGUI{
 	private final Stage thisStage;
 	PrimaryGUI primController;
 	FoodData food;
-	private ListView<FoodItem> foodList;
 
-	public AddFoodItemController(PrimaryGUI primaryGUI, ListView<FoodItem> list) {
+
+	/**
+	 * Initializes window in which to describe food and allows access to FoodData through
+	 * the passing of the Primary controller's instance of itself
+	 * 
+	 * @param primaryGUI - allows access to primaryGUI, therefore to FoodData
+	 */
+	public AddFoodItemController(PrimaryGUI primaryGUI) {
 		// Create the new stage
         thisStage = new Stage();
 
@@ -58,9 +71,12 @@ public class AddFoodItemController extends PrimaryGUI{
         }
         primController = primaryGUI;
         this.food = primController.foodDataAccess();
-        foodList = list;
+
 	}
 
+	// Pulls input from Food name and nutrient value text boxes, then creates a new
+	// food item with the desired values. The food item is then added to the food list
+	// through calling addFoodItem in FoodData
 	// Event Listener on Button[#AddFoodItem].onAction
 	@FXML
 	public void addFoodItemToFoodList(ActionEvent event) {

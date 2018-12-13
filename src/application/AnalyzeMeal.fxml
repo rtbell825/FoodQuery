@@ -8,7 +8,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -28,12 +27,12 @@
                   <Insets top="60.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="TotalCalories" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="50.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="TotalCalories" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="80.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
                <VBox.margin>
-                  <Insets left="88.0" />
+                  <Insets left="73.0" />
                </VBox.margin>
             </Label>
             <Label text="Fat(grams)" textFill="WHITE">
@@ -41,18 +40,18 @@
                   <Font size="14.0" />
                </font>
                <padding>
-                  <Insets left="80.0" />
+                  <Insets left="78.0" />
                </padding>
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="TotalFat" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="50.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="TotalFat" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="80.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
                <VBox.margin>
-                  <Insets left="88.0" />
+                  <Insets left="73.0" />
                </VBox.margin>
             </Label>
             <Label text="Carbohydrates(grams)" textFill="WHITE">
@@ -66,12 +65,12 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="TotalCarbs" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="50.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="TotalCarbs" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="80.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
                <VBox.margin>
-                  <Insets left="88.0" />
+                  <Insets left="73.0" />
                </VBox.margin>
             </Label>
             <Label text="Fiber(grams)" textFill="WHITE">
@@ -79,18 +78,18 @@
                   <Font size="14.0" />
                </font>
                <padding>
-                  <Insets left="75.0" />
+                  <Insets left="71.0" />
                </padding>
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="TotalFiber" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="50.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="TotalFiber" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="80.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
                <VBox.margin>
-                  <Insets left="88.0" />
+                  <Insets left="73.0" />
                </VBox.margin>
             </Label>
             <Label text="Protein(grams)" textFill="WHITE">
@@ -98,18 +97,18 @@
                   <Font size="14.0" />
                </font>
                <padding>
-                  <Insets left="70.0" />
+                  <Insets left="65.0" />
                </padding>
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="TotalProtein" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="50.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="TotalProtein" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="80.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
                <VBox.margin>
-                  <Insets left="88.0" />
+                  <Insets left="73.0" />
                </VBox.margin>
             </Label>
             <Button fx:id="AnalyzeTotalMeal" mnemonicParsing="false" onAction="#totalNutrientsInMeal" style="-fx-background-color: #C5050C#C5050C;" text="Analyze" textFill="WHITE">
@@ -133,7 +132,7 @@
       </MenuBar>
       <AnchorPane layoutX="220.0" layoutY="52.0" prefHeight="246.0" prefWidth="260.0">
          <children>
-            <PieChart fx:id="Chart" prefHeight="313.0" prefWidth="374.0" style="-fx-background-insets: 2;" AnchorPane.rightAnchor="10.0"/>
+            <PieChart fx:id="Chart" prefHeight="313.0" prefWidth="374.0" style="-fx-background-insets: 2;" AnchorPane.rightAnchor="10.0" />
          </children>
       </AnchorPane>
    </children>

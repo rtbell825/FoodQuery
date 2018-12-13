@@ -12,6 +12,12 @@ import java.io.IOException;
 
 import javafx.event.ActionEvent;
 
+/**
+ * Simple Controller that allows the user to save the current food list as a .csv file
+ * 
+ * @author Harrison
+ *
+ */
 public class SaveFoodController {
 	@FXML
 	private TextField UserFileName;
@@ -22,6 +28,11 @@ public class SaveFoodController {
 	private Stage thisStage;
 	private PrimaryGUI primController;
 
+	/**
+	 * Constructor to initialize window and provide access to FoodData
+	 * 
+	 * @param primaryGUI - allows access to primaryGUI, therefore to FoodData
+	 */
 	public SaveFoodController(PrimaryGUI primaryGUI) {
 		thisStage = new Stage();
 
@@ -45,6 +56,8 @@ public class SaveFoodController {
 		food = primController.foodDataAccess();
 	}
 
+	// Pulls preferred file name from text field and passes to FoodData in order
+	// to create a file with said name. Window closes upon saving.
 	// Event Listener on Button[#Save].onAction
 	@FXML
 	public void callToFoodDataSave(ActionEvent event) {

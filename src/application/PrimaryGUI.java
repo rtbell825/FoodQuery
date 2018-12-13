@@ -29,6 +29,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 
+/**
+ * This class assists in coordinating data changes between what is displayed by the FXML
+ * file what what is stored within food data.
+ * 
+ * @author Harrison
+ *
+ */
 public class PrimaryGUI{
 
 	private FoodData food;
@@ -79,7 +86,9 @@ public class PrimaryGUI{
 	@FXML
 	private Button ClearSearch;
 
-
+	/**
+	 * Custom constructor for GUI so that a FoodData object can be instantiated.
+	 */
 	public PrimaryGUI() {
 		food = new FoodData();
 		food.loadFoodItems("foodItems.csv");
@@ -103,15 +112,15 @@ public class PrimaryGUI{
 		
 		
 	}
+	// Adds the selected food list object to the meal list
 	// Event Listener on Button[#AddToMealList].onAction
 	@FXML
 	public void addToMealList(ActionEvent event) {
 		FoodItem currItem = FoodList.getSelectionModel().getSelectedItem();
 		
-		mealObList.add(currItem);
-		
-		
+		mealObList.add(currItem);	
 	}
+	// removes the selected meal list object from the meal list
 	// Event Listener on Button[#RemoveFromMealList].onAction
 	@FXML
 	public void removeFromMealList(ActionEvent event) {
@@ -120,14 +129,20 @@ public class PrimaryGUI{
 		mealObList.remove(currItem);
 		initialize();
 	}
+	// Launches a new window when the user wishes to add a new food.
 	// Event Listener on Button[#AddToFoodList].onAction
 	@FXML
 	public void launchAddFoodWindow(ActionEvent event) {
-		AddFoodItemController controller2 = new AddFoodItemController(this, FoodList);
+		AddFoodItemController controller2 = new AddFoodItemController(this);
 		controller2.showStage();
 		initialize();
 
 	}
+	// Pulls user input from text fields and radio buttons to construct arguments
+	// for query methods within food data. Has three cases.
+	// 1. All inputs are valid - display food items that exist in both results
+	// 2. Only nutrient arguments are entered
+	// 3. Only a food name is entered
 	// Event Listener on Button[#SearchFoodList].onAction
 	@FXML
 	public void searchFoodList(ActionEvent event) {
@@ -184,6 +199,7 @@ public class PrimaryGUI{
 		
 		
 	}
+	//resets all search parameters, both internal data and GUI displayed
 	public void clearSearch(ActionEvent event) {
 		searching = false;
 		SearchLessThan.setSelected(false);
@@ -194,6 +210,7 @@ public class PrimaryGUI{
 		SearchNutrientAmount.clear();
 		initialize();
 	}
+	// launches the meal analyzer window and passes in the current meal list
 	// Event Listener on Button[#AnalyzeMeal].onAction
 	@FXML
 	public void launchMealAnalyzerWindow(ActionEvent event) {
@@ -207,11 +224,14 @@ public class PrimaryGUI{
 	public void resetAnalyzer(ActionEvent event) {
 		
 	}
+	// Opens a new window that asks user for a desired filename
 	@FXML
 	public void saveFoodList(ActionEvent event) {
 		SaveFoodController controller4 = new SaveFoodController(this);
 		controller4.showStage();
 	}
+	// Utilizes file choser, parses file name as string, passes string as argument to
+	// FoodData so that the file may be loaded into the application
 	@FXML
 	public void loadFoodList(ActionEvent event) {
 		String chosenFile = "";
@@ -243,6 +263,8 @@ public class PrimaryGUI{
 		thisStage.showAndWait();
 	}
 	
+	// Method used to initialize application on startup, and then update the GUIs
+	// display as data values change.
 	public void initialize() {
 
 		foodObList = FXCollections.observableArrayList(food.getAllFoodItems());
