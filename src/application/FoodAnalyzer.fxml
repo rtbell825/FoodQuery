@@ -90,12 +90,12 @@
                               <Insets left="10.0" top="103.0" />
                            </VBox.margin>
                         </Label>
-                        <Label fx:id="TotalFoodListItems" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="100.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
+                        <Label fx:id="TotalFoodListItems" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="180.0" style="-fx-border-color: #ffffff;" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets left="50.0" />
+                              <Insets left="10.0" />
                            </VBox.margin>
                         </Label>
                      </children>
