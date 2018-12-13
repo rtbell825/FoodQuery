@@ -258,7 +258,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                     }
                     if (newKey.compareTo(keys.get(j)) < 0) { //if newKey is less than a key in list...
                         int c = j; //temp index that starts at j
-                        while (children.get(c).getFirstLeafKey().compareTo(newKey) <= 0) {
+                        while (children.get(c).getFirstLeafKey().compareTo(newKey) <= 0) { //TODO:
                             //iterates through children until one is found that is greater than newKey
                             c++;
                         }
@@ -300,7 +300,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                     //...every key in this node's list of keys
                     return children.get(i).rangeSearch(key, comparator); //call rangeSearch on last node in list
                 }
-                else if (key.compareTo(keys.get(i)) == -1) { //true if a key in keys list is greater than key param
+                else if (key.compareTo(keys.get(i)) <= 0) { //true if a key in keys list is greater than key param
                     return children.get(i).rangeSearch(key, comparator); //call rangeSearch on node at index
                 }
             }
@@ -386,6 +386,9 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         Node split() {
             LeafNode sister = new LeafNode(); //new leaf node to store sibling data
             sister.next = this.next; //reset sister's next to this node
+            if (this.next != null) {
+                this.next.previous = sister;
+            }
             this.next = sister; //reset this node's next to sister
             sister.previous = this; //reset sister's previous to this node
 
@@ -409,12 +412,19 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         List<V> rangeSearch(K key, String comparator) {
             if (comparator.contentEquals(">=")) { //return the list of values that is greater than or equal to the key
                 List<V> greaterList = new ArrayList<V>(); //list to store greater values
+                
                 LeafNode curr = this; //current node set to this node
+                while(curr.previous != null) {
+                    curr = curr.previous;
+                }
+                
                 do { //do while loop to iterate through all next nodes in linked list
                     for(int i = 0; i < curr.keys.size(); i++) { //iterates through all keys in current node
                         if (key.compareTo(curr.keys.get(i)) <= 0) { //value in key list is equal to or greater than key
+                            
                             greaterList.add(curr.values.get(i)); //adds all values "to the right" of initial value
                         }
+                        
                     }
                     curr = curr.next; //reset current node to its next node
                 } while (curr != null); //while current node isn't equal to null, continue
@@ -423,11 +433,16 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             else if (comparator.contentEquals("<=")) { //return the list of values that is less than or equal to the key
                 List<V> lesserList = new ArrayList<V>(); //list to store lesser values
                 LeafNode curr = this; //current node set to this node
+                while(curr.next != null) {
+                    curr = curr.next;
+                }
+                
                 do { //do while loop to iterate through all previous nodes in linked list
                     for(int i = curr.keys.size() - 1; i >= 0; i--) { //iterates (in reverse) through all keys in current node
                         if (key.compareTo(curr.keys.get(i)) >= 0) { //value in key list is equal to or less than key
                             lesserList.add(curr.values.get(i)); //adds all values "to the left" of initial value
                         }
+                        
                     }
                     curr = curr.previous; //reset current node to its previous node
                 } while (curr != null); //while current node isn't equal to null, continue
@@ -449,7 +464,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                 
                 //we now have all values equal to key from the "right" side of the linked list
                 
-                curr = this.previous; //reset current node to this node's previous node
+                curr = previous; //reset current node to this node's previous node
                 if (curr != null) { //checks if current node isn't null
                     do { //do while loop to iterate through all nodes to "left" of current node 
                         for(int i = curr.keys.size() - 1; i >= 0; i--) { //iterate through key list of current node backwards
@@ -479,13 +494,10 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
     public static void main(String[] args) {
         // create empty BPTree with branching factor of 3
         BPTree<Double, Double> BPTree = new BPTree<>(3);
-
         // create a pseudo random number generator
         Random rnd1 = new Random();
-
         // some value to add to the BPTree
         Double[] dd = {0.0d, 0.5d, 0.2d, 0.8d};
-
         // build an ArrayList of those value and add to BPTree also
         // allows for comparing the contents of the ArrayList 
         // against the contents and functionality of the BPTree
@@ -493,7 +505,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         // just that it functions as a data structure with
         // insert, rangeSearch, and toString() working.
         List<Double> list = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 100; i++) {
             Double j = dd[rnd1.nextInt(4)];
             list.add(j);
             BPTree.insert(j, j);
@@ -503,4 +515,5 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         System.out.println("Filtered values: " + filteredValues.toString());
     }
     */
+    
 } // End of class BPTree
