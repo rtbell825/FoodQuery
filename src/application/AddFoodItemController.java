@@ -81,6 +81,8 @@ public class AddFoodItemController extends PrimaryGUI{
 		addedFood.addNutrient("protein", protein);
 		
 		food.addFoodItem(addedFood);
+		
+		primController.initialize();
 	}
 
 	public void showStage() {

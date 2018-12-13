@@ -35,6 +35,8 @@ public class PrimaryGUI{
 	private final Stage thisStage;
 	private ObservableList<FoodItem> foodObList = FXCollections.observableArrayList();
 	private ObservableList<FoodItem> mealObList = FXCollections.observableArrayList();
+	private ObservableList<FoodItem> searchObList = FXCollections.observableArrayList();
+	private boolean searching;
 	
 	@FXML
 	private MenuItem Reset;
@@ -72,6 +74,10 @@ public class PrimaryGUI{
 	private Button SearchFoodList;
 	@FXML
 	private Button AnalyzeMeal;
+	@FXML
+	private Button ClearMealList;
+	@FXML
+	private Button ClearSearch;
 
 
 	public PrimaryGUI() {
@@ -125,7 +131,68 @@ public class PrimaryGUI{
 	// Event Listener on Button[#SearchFoodList].onAction
 	@FXML
 	public void searchFoodList(ActionEvent event) {
+		List<FoodItem> returnedNameList = new ArrayList<FoodItem>();
+		List<FoodItem> returnedNutrientList = new ArrayList<FoodItem>();
 		
+		
+		List<String> rules = new ArrayList<String>();
+		searching = true;
+		searchObList.clear();
+		String comparator = "";
+		String foodName = SearchFoodName.getText();
+		String nutrientName = SearchNutrientName.getText();
+		String nutrientAmount = SearchNutrientAmount.getText();
+		if(SearchLessThan.isSelected()) {
+			comparator = "<=";
+		}
+		else if(SearchEqual.isSelected()) {
+			comparator = "==";
+		}
+		else if(SearchGreaterThan.isSelected()) {
+			comparator = ">=";
+		}
+		
+		if(nutrientName != null && comparator != "" && nutrientAmount != null && foodName != null) {
+			returnedNameList = food.filterByName(foodName);
+			
+			rules.add(nutrientName);
+			rules.add(comparator);
+			rules.add(nutrientAmount);
+			returnedNutrientList = food.filterByNutrients(rules);
+			for(int i = 0; i < returnedNameList.size(); ++i) {
+				if(returnedNutrientList.contains(returnedNameList.get(i))) {
+					searchObList.add(returnedNameList.get(i));
+				}
+			}
+			
+		}
+		else if(nutrientName != null && comparator != "" && nutrientAmount != null && foodName == null) {
+			rules.add(nutrientName);
+			rules.add(comparator);
+			rules.add(nutrientAmount);
+			returnedNutrientList = food.filterByNutrients(rules);
+			searchObList.addAll(returnedNutrientList);
+		}
+		else if(foodName != null && nutrientName.isEmpty() && nutrientAmount.isEmpty()) {
+			returnedNameList = food.filterByName(foodName);
+			searchObList.addAll(returnedNameList);
+		}
+		
+		
+		initialize();
+		
+		
+		
+	}
+	public void clearSearch(ActionEvent event) {
+		searching = false;
+		SearchLessThan.setSelected(false);
+		SearchEqual.setSelected(false);
+		SearchGreaterThan.setSelected(false);
+		SearchFoodName.clear();
+		SearchNutrientName.clear();
+		SearchNutrientAmount.clear();
+		initialize();
 	}
 	// Event Listener on Button[#AnalyzeMeal].onAction
 	@FXML
@@ -142,7 +209,8 @@ public class PrimaryGUI{
 	}
 	@FXML
 	public void saveFoodList(ActionEvent event) {
-		
+		SaveFoodController controller4 = new SaveFoodController(this);
+		controller4.showStage();
 	}
 	@FXML
 	public void loadFoodList(ActionEvent event) {
@@ -156,13 +224,17 @@ public class PrimaryGUI{
 		if(chosenFile != "") {
 			food = new FoodData();
 			food.loadFoodItems(chosenFile);
-			System.out.println(foodObList.size());
+
 		}
 		initialize();
 	}
 	@FXML
 	public void launchInstructionsWindow(ActionEvent event) {
 		
+	}
+	@FXML
+	public void clearMealList(ActionEvent event) {
+		mealObList.clear();
 	}
 
 	public FoodData foodDataAccess() {
@@ -175,15 +247,31 @@ public class PrimaryGUI{
 	public void initialize() {
 
 		foodObList = FXCollections.observableArrayList(food.getAllFoodItems());
-		FoodList.setItems(foodObList);
+		if(searching) {
+			FoodList.setItems(searchObList);
+		}
+		else {
+			FoodList.setItems(foodObList);
+		}
 		MealList.setItems(mealObList);
 		TotalFoodListItems.setText(String.valueOf(foodObList.size()));
 		
+		if(!searchObList.isEmpty()) {
+			Collections.sort(searchObList, new Comparator<FoodItem>() {
+
+		        public int compare(FoodItem foodOne, FoodItem foodTwo) {
+		            // compare two instance of `Score` and return `int` as result.
+		            return foodOne.getName().compareToIgnoreCase(foodTwo.getName());
+		        }
+		    });
+		}
+		
+		
 		Collections.sort(foodObList, new Comparator<FoodItem>() {
 
-	        public int compare(FoodItem o1, FoodItem o2) {
+	        public int compare(FoodItem foodOne, FoodItem foodTwo) {
 	            // compare two instance of `Score` and return `int` as result.
-	            return o1.getName().compareToIgnoreCase(o2.getName());
+	            return foodOne.getName().compareToIgnoreCase(foodTwo.getName());
 	        }
 	    });
 
