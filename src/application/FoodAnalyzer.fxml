@@ -9,6 +9,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -59,9 +60,9 @@
                <children>
                   <VBox layoutX="50.0" layoutY="99.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button fx:id="AddToFoodList" mnemonicParsing="false" onAction="#launchAddFoodWindow" style="-fx-background-color: #C5050C#C5050C;" text="Add Item To Food List" textFill="WHITE">
+                        <Button fx:id="AddToFoodList" mnemonicParsing="false" onAction="#launchAddFoodWindow" style="-fx-background-color: #C5050C#C5050C;" text="Add New Item To Food List" textFill="WHITE">
                            <VBox.margin>
-                              <Insets left="18.0" top="125.0" />
+                              <Insets top="125.0" />
                            </VBox.margin>
                            <effect>
                               <DropShadow blurType="ONE_PASS_BOX" />
@@ -125,7 +126,10 @@
                         </Button>
                      </children>
                   </VBox>
-               </children></AnchorPane>
+               </children>
+               <BorderPane.margin>
+                  <Insets left="1.0" />
+               </BorderPane.margin></AnchorPane>
          </left>
          <right>
             <AnchorPane prefHeight="170.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -140,7 +144,7 @@
                               <Insets left="60.0" />
                            </padding>
                            <VBox.margin>
-                              <Insets top="85.0" />
+                              <Insets top="30.0" />
                            </VBox.margin>
                         </Label>
                         <TextField fx:id="SearchFoodName" prefWidth="200.0">
@@ -168,13 +172,16 @@
                            <VBox.margin>
                               <Insets left="70.0" top="10.0" />
                            </VBox.margin>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="NutrientValue" />
+                           </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="SearchEqual" mnemonicParsing="false" text="==" textFill="WHITE">
+                        <RadioButton fx:id="SearchEqual" mnemonicParsing="false" text="==" textFill="WHITE" toggleGroup="$NutrientValue">
                            <VBox.margin>
                               <Insets left="70.0" top="2.0" />
                            </VBox.margin>
                         </RadioButton>
-                        <RadioButton fx:id="SearchGreaterThan" mnemonicParsing="false" text="&gt;=" textFill="WHITE">
+                        <RadioButton fx:id="SearchGreaterThan" mnemonicParsing="false" text="&gt;=" textFill="WHITE" toggleGroup="$NutrientValue">
                            <VBox.margin>
                               <Insets left="70.0" top="2.0" />
                            </VBox.margin>
@@ -203,8 +210,28 @@
                               <DropShadow blurType="ONE_PASS_BOX" />
                            </effect>
                         </Button>
+                        <Button fx:id="ClearSearch" mnemonicParsing="false" onAction="#clearSearch" style="-fx-background-color: #C5050C#C5050C;" text="Clear Search" textFill="WHITE">
+                           <effect>
+                              <DropShadow blurType="ONE_PASS_BOX" />
+                           </effect>
+                           <VBox.margin>
+                              <Insets left="50.0" top="25.0" />
+                           </VBox.margin>
+                        </Button>
                      </children>
                   </VBox>
+                  <AnchorPane layoutY="404.0" prefHeight="280.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="ClearMealList" layoutX="43.0" layoutY="115.0" mnemonicParsing="false" onAction="#clearMealList" style="-fx-background-color: #C5050C#C5050C;" text="Clear Meal List" textFill="WHITE" AnchorPane.topAnchor="120.0">
+                           <effect>
+                              <DropShadow blurType="ONE_PASS_BOX" />
+                           </effect>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
                </children></AnchorPane>
          </right>
       </BorderPane>

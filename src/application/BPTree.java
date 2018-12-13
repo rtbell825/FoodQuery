@@ -46,7 +46,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         this.branchingFactor = branchingFactor;
     }
     
-    
     /*
      * (non-Javadoc)
      * @see BPTreeADT#insert(java.lang.Object, java.lang.Object)
@@ -476,7 +475,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
      * @param args
      */
     
-    
+    /*
     public static void main(String[] args) {
         // create empty BPTree with branching factor of 3
         BPTree<Double, Double> BPTree = new BPTree<>(3);
@@ -503,4 +502,5 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         List<Double> filteredValues = BPTree.rangeSearch(0.2d, ">=");
         System.out.println("Filtered values: " + filteredValues.toString());
     }
+    */
 } // End of class BPTree
